@@ -2,8 +2,13 @@ import { motion } from 'framer-motion';
 import { fadeInUp, staggerContainer, photoAnim } from '../animations/variants';
 import { ArrowRight, Github, Linkedin, Mail } from 'lucide-react';
 import profileImg from '../assets/IMG-20241103-WA0016 1.jpg';
+import useMobile from '../hooks/useMobile';
+import useNavTrigger from '../hooks/useNavTrigger';
 
 const Hero = () => {
+    const isMobile = useMobile();
+    const refreshKey = useNavTrigger('home');
+
     return (
         <section id="home" className="min-h-screen flex items-center pt-20 relative overflow-hidden">
             {/* Background Elements */}
@@ -13,10 +18,11 @@ const Hero = () => {
             <div className="container mx-auto px-6">
                 <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-12">
                     <motion.div
+                        key={refreshKey}
                         variants={staggerContainer}
                         initial="hidden"
                         whileInView="visible"
-                        viewport={{ amount: 0.1 }}
+                        viewport={{ amount: 0.1, once: true }}
                         className="md:w-1/2 gpu-accelerated"
                     >
                         <motion.p variants={fadeInUp} className="text-accent font-medium mb-4 text-lg">
@@ -49,7 +55,7 @@ const Hero = () => {
                     <motion.div
                         initial="hidden"
                         whileInView="visible"
-                        viewport={{ amount: 0.1 }}
+                        viewport={{ amount: 0.1, once: true }}
                         variants={photoAnim}
                         className="md:w-1/2 flex flex-col items-center justify-center relative"
                     >

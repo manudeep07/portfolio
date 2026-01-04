@@ -3,9 +3,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { fadeInUp, staggerContainer } from '../animations/variants';
 import { Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import emailjs from '@emailjs/browser';
+import useMobile from '../hooks/useMobile';
+import useNavTrigger from '../hooks/useNavTrigger';
 
 const Contact = () => {
     const form = useRef();
+    const isMobile = useMobile();
+    const refreshKey = useNavTrigger('contact');
     const [formState, setFormState] = useState({
         name: '',
         email: '',
@@ -51,9 +55,10 @@ const Contact = () => {
         <section id="contact" className="py-16 md:py-24 bg-gradient-to-b from-black to-gray-900 text-white">
             <div className="container mx-auto px-6 max-w-4xl">
                 <motion.div
+                    key={refreshKey}
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ amount: 0.3 }}
+                    viewport={{ amount: 0.3, once: true }}
                     className="text-center mb-16"
                 >
                     <motion.h2 variants={fadeInUp} className="text-3xl md:text-5xl font-bold mb-4">

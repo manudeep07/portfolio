@@ -37,6 +37,11 @@ const Navbar = () => {
         e.preventDefault();
         setIsOpen(false);
         const targetId = href.replace('#', '');
+
+        // Dispatch custom event to notify sections to re-animate
+        const event = new CustomEvent('nav-click', { detail: targetId });
+        window.dispatchEvent(event);
+
         const targetElement = document.getElementById(targetId);
 
         if (targetElement) {

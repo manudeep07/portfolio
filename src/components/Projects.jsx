@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fadeInUp, staggerContainer } from '../animations/variants';
 import { X, ExternalLink, Github } from 'lucide-react';
+import useMobile from '../hooks/useMobile';
+import useNavTrigger from '../hooks/useNavTrigger';
 
 const projects = [
     {
@@ -38,14 +40,17 @@ const projects = [
 
 const Projects = () => {
     const [selectedProject, setSelectedProject] = useState(null);
+    const isMobile = useMobile();
+    const refreshKey = useNavTrigger('projects');
 
     return (
         <section id="projects" className="py-12 md:py-20 bg-black text-white relative">
             <div className="container mx-auto px-6">
                 <motion.div
+                    key={refreshKey}
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ amount: 0.1 }}
+                    viewport={{ amount: 0.1, once: true }}
                     variants={staggerContainer}
                     className="max-w-6xl mx-auto"
                 >

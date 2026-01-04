@@ -1,15 +1,21 @@
 import { motion } from 'framer-motion';
 import { fadeInUp, staggerContainer } from '../animations/variants';
 import { Code, Terminal, Cpu } from 'lucide-react';
+import useMobile from '../hooks/useMobile';
+import useNavTrigger from '../hooks/useNavTrigger';
 
 const About = () => {
+    const isMobile = useMobile();
+    const refreshKey = useNavTrigger('about'); // ID passed without #
+
     return (
         <section id="about" className="py-16 md:py-20 bg-black text-white relative overflow-hidden">
             <div className="container mx-auto px-6">
                 <motion.div
+                    key={refreshKey}
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ amount: 0.3 }}
+                    viewport={{ amount: 0.3, once: true }}
                     variants={staggerContainer}
                     className="flex flex-col md:flex-row items-center gap-12"
                 >
