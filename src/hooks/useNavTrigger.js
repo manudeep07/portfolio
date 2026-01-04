@@ -12,8 +12,8 @@ const useNavTrigger = (sectionId) => {
     useEffect(() => {
         const handleNavClick = (event) => {
             // Check if the clicked link matches this section
-            // event.detail should contain the target ID (e.g., '#about')
-            if (event.detail === `#${sectionId}`) {
+            // event.detail contains the target ID (without #) sent from Navbar
+            if (event.detail === sectionId) {
                 setTriggerKey(prev => prev + 1);
             }
         };
