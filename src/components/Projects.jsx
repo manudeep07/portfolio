@@ -92,7 +92,7 @@ const Projects = () => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+                        className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto"
                         onClick={() => setSelectedProject(null)}
                     >
                         <motion.div
@@ -100,17 +100,17 @@ const Projects = () => {
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.9, opacity: 0 }}
                             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                            className="bg-card w-full max-w-2xl rounded-3xl overflow-hidden border border-gray-800 relative shadow-2xl"
+                            className="bg-card w-full max-w-2xl rounded-3xl overflow-hidden border border-gray-800 relative shadow-2xl my-8"
                             onClick={(e) => e.stopPropagation()}
                         >
                             <button
                                 onClick={() => setSelectedProject(null)}
-                                className="absolute top-4 right-4 p-2 bg-black/50 rounded-full text-white hover:bg-white hover:text-black transition-colors z-10"
+                                className="absolute top-4 right-4 p-2 bg-black/50 rounded-full text-white hover:bg-white hover:text-black transition-colors z-20"
                             >
-                                <X size={20} />
+                                <X size={24} />
                             </button>
 
-                            <div className="relative h-64">
+                            <div className="relative w-full aspect-video">
                                 <img
                                     src={selectedProject.image}
                                     alt={selectedProject.title}
@@ -119,8 +119,8 @@ const Projects = () => {
                                 <div className="absolute inset-0 bg-gradient-to-t from-card to-transparent"></div>
                             </div>
 
-                            <div className="p-8">
-                                <h3 className="text-3xl font-bold mb-2">{selectedProject.title}</h3>
+                            <div className="p-6 md:p-8">
+                                <h3 className="text-2xl md:text-3xl font-bold mb-2">{selectedProject.title}</h3>
                                 <p className="text-accent font-medium mb-6">{selectedProject.category}</p>
 
                                 <p className="text-gray-300 leading-relaxed mb-6">
@@ -135,7 +135,7 @@ const Projects = () => {
                                     ))}
                                 </div>
 
-                                <div className="flex gap-4">
+                                <div className="flex flex-col sm:flex-row gap-4">
                                     <a href={selectedProject.LiveDemo} className="flex-1 py-3 bg-white text-black font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-gray-200 transition-colors">
                                         Live Demo <ExternalLink size={18} />
                                     </a>
