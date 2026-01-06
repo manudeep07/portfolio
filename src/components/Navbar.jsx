@@ -78,7 +78,7 @@ const Navbar = () => {
                     onClick={(e) => handleNavClick(e, '#home')}
                     className="text-2xl font-bold font-mono tracking-tighter hover:text-accent transition-colors"
                 >
-                    manudeep.xyz
+                    Manudeep
                 </a>
 
                 {/* Desktop Menu */}

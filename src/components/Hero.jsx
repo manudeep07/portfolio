@@ -71,9 +71,9 @@ const Hero = () => {
                         </motion.div>
 
                         <motion.div variants={fadeInUp} className="mt-16 flex items-center gap-6 text-gray-400">
-                            <motion.a whileHover={{ scale: 1.2, color: "#fff" }} href="https://github.com/manudeep07/" className="transition-colors cursor-pointer"><Github size={24} /></motion.a>
-                            <motion.a whileHover={{ scale: 1.2, color: "#0A66C2" }} href="https://www.linkedin.com/in/manudeep07/" className="transition-colors cursor-pointer"><Linkedin size={24} /></motion.a>
-                            <motion.a whileHover={{ scale: 1.2, color: "#EA4335" }} href="mailto:manudeep1000@gmail.com" className="transition-colors cursor-pointer"><Mail size={24} /></motion.a>
+                            <motion.a whileHover={{ scale: 1.2, color: "#fff" }} href="https://github.com/manudeep07/" target="_blank" rel="noopener noreferrer" className="transition-colors cursor-pointer"><Github size={24} /></motion.a>
+                            <motion.a whileHover={{ scale: 1.2, color: "#0A66C2" }} href="https://www.linkedin.com/in/manudeep07/" target="_blank" rel="noopener noreferrer" className="transition-colors cursor-pointer"><Linkedin size={24} /></motion.a>
+                            <motion.a whileHover={{ scale: 1.2, color: "#EA4335" }} href="mailto:manudeep1000@gmail.com"  className="transition-colors cursor-pointer"><Mail size={24} /></motion.a>
                         </motion.div>
                     </motion.div>
 
@@ -87,7 +87,7 @@ const Hero = () => {
                         <motion.div
                             whileHover={{ scale: 1.05 }}
                             transition={{ duration: 0.4, ease: "easeOut" }}
-                            className="relative w-64 h-64 md:w-96 md:h-96 rounded-full overflow-hidden border-4 border-gray-800 shadow-2xl z-10 cursor-pointer"
+                            className="relative w-64 h-64 md:w-96 md:h-96 rounded-full overflow-hidden border-4 border-gray-800 shadow-2xl z-10"
                         >
                             <img
                                 src={profileImg}

@@ -44,7 +44,7 @@ const Skills = () => {
                                 key={skill.name}
                                 variants={scaleUp}
                                 whileHover={{ scale: 1.05, borderColor: "rgba(255,255,255,0.4)" }}
-                                className="px-6 py-3 cursor-pointer rounded-full border border-gray-800 bg-card text-gray-300 cursor-default hover:text-white hover:bg-white/5 transition-colors"
+                                className="px-6 py-3 rounded-full border border-gray-800 bg-card text-gray-300 cursor-default hover:text-white hover:bg-white/5 transition-colors"
                             >
                                 {skill.name}
                             </motion.div>
