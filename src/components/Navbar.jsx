@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { navVariants } from '../animations/variants';
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
+import cv_12318201 from '../assets/cv_12318201.pdf';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -94,12 +95,13 @@ const Navbar = () => {
                             <span className={`absolute -bottom-1 left-0 h-0.5 bg-accent transition-all duration-300 ${activeSection === link.href.substring(1) ? 'w-full' : 'w-0 group-hover:w-full'}`}></span>
                         </a>
                     ))}
-                    <button
-                        onClick={(e) => handleNavClick(e, '#projects')}
-                        className="px-4 py-2 text-sm font-medium text-black bg-white rounded-full hover:bg-gray-200 transition-colors"
+                    <a
+                        href={cv_12318201}
+                        download="Narasingu_Manudeep_CV.pdf"
+                        className="mb-2 px-4 py-2 text-sm font-medium text-black bg-white rounded-full hover:bg-gray-200 transition-colors"
                     >
-                        View Work
-                    </button>
+                        Download CV
+                    </a>
                 </div>
 
                 {/* Mobile Toggle */}
