@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { fadeInUp, staggerContainer } from '../animations/variants';
+import { blurFadeIn, staggerContainer } from '../animations/variants';
 import { X, ExternalLink, Github } from 'lucide-react';
-import useMobile from '../hooks/useMobile';
 import useNavTrigger from '../hooks/useNavTrigger';
 
 const projects = [
@@ -40,49 +39,58 @@ const projects = [
 
 const Projects = () => {
     const [selectedProject, setSelectedProject] = useState(null);
-    const isMobile = useMobile();
     const refreshKey = useNavTrigger('projects');
 
     return (
-        <section id="projects" className="py-12 md:py-20 bg-black text-white relative">
-            <div className="container mx-auto px-6">
+        <section id="projects" className="py-24 scroll-mt-20 bg-black text-white relative">
+            <div className="container mx-auto px-6 max-w-6xl relative z-10">
                 <motion.div
                     key={refreshKey}
                     initial="hidden"
                     whileInView="visible"
                     viewport={{ amount: 0.1, once: true }}
                     variants={staggerContainer}
-                    className="max-w-6xl mx-auto"
                 >
-                    <motion.h2 variants={fadeInUp} className="text-3xl md:text-5xl font-bold mb-12 text-center">
-                        Projects
-                    </motion.h2>
+                    <div className="mb-20 text-center">
+                        <motion.h2 variants={blurFadeIn} className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
+                            Selected Works
+                        </motion.h2>
+                        <motion.p variants={blurFadeIn} className="text-gray-400 text-lg max-w-2xl mx-auto font-light">
+                            Production-grade applications built resolving complex digital architecture logic.
+                        </motion.p>
+                    </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 group/list">
                         {projects.map((project) => (
                             <motion.div
                                 key={project.id}
-                                variants={fadeInUp}
-                                whileHover={{ y: -10, transition: { duration: 0.3 } }}
-                                className="group relative cursor-pointer gpu-accelerated"
+                                variants={blurFadeIn}
                                 onClick={() => setSelectedProject(project)}
+                                className={`
+                                    group/item relative cursor-pointer gpu-accelerated flex flex-col h-full
+                                    bg-white/[0.02] p-4 rounded-3xl border border-white/[0.05] 
+                                    shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)] transition-all duration-500 
+                                    hover:bg-white/[0.04] hover:border-white/10 group-hover/list:opacity-40 hover:!opacity-100
+                                `}
                             >
-                                <div className="relative overflow-hidden rounded-2xl aspect-[4/3] bg-gray-900 border border-gray-800">
-                                    {/* Overlay */}
-                                    <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors z-10" />
-
+                                <div className="relative overflow-hidden rounded-2xl aspect-[4/3] bg-[#0a0a0a] border border-white/5 mb-5 select-none">
                                     <img
                                         src={project.image}
                                         alt={project.title}
-                                        className="object-cover w-full h-full transform group-hover:scale-110 transition-transform duration-500"
+                                        className="object-cover w-full h-full transform group-hover/item:scale-[1.03] transition-transform duration-[1s] ease-[cubic-bezier(0.22,1,0.36,1)]"
                                     />
+                                    {/* Ultra subtle gradient overlay on hover */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover/item:opacity-100 transition-opacity duration-500" />
+                                </div>
 
-                                    <div className="absolute bottom-0 left-0 p-6 z-20 w-full bg-gradient-to-t from-black/90 to-transparent">
-                                        <span className="text-accent text-sm font-medium mb-1 block">{project.category}</span>
-                                        <h3 className="text-xl font-bold text-white group-hover:text-accent transition-colors">
-                                            {project.title}
-                                        </h3>
-                                    </div>
+                                <div className="px-2 pb-2 flex flex-col flex-1">
+                                    <span className="text-gray-500 text-xs font-semibold mb-2 uppercase tracking-[0.1em]">{project.category}</span>
+                                    <h3 className="text-xl font-bold text-white/90 group-hover/item:text-white transition-colors tracking-tight">
+                                        {project.title}
+                                    </h3>
+                                    <p className="text-sm text-gray-400 mt-2 line-clamp-2 leading-relaxed font-light">
+                                        {project.description}
+                                    </p>
                                 </div>
                             </motion.div>
                         ))}
@@ -90,67 +98,72 @@ const Projects = () => {
                 </motion.div>
             </div>
 
-            {/* Modal */}
+            {/* Application Modal */}
             <AnimatePresence>
                 {selectedProject && (
                     <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm overflow-y-auto"
+                        initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
+                        animate={{ opacity: 1, backdropFilter: "blur(12px)" }}
+                        exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
+                        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                        className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 overflow-y-auto"
                         onClick={() => setSelectedProject(null)}
                     >
                         <motion.div
-                            initial={{ scale: 0.9, opacity: 0 }}
-                            animate={{ scale: 1, opacity: 1 }}
-                            exit={{ scale: 0.9, opacity: 0 }}
-                            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-                            className="bg-card w-full max-w-2xl rounded-3xl overflow-hidden border border-gray-800 relative shadow-2xl my-8"
+                            initial={{ scale: 0.95, opacity: 0, y: 10, filter: "blur(10px)" }}
+                            animate={{ scale: 1, opacity: 1, y: 0, filter: "blur(0px)" }}
+                            exit={{ scale: 0.95, opacity: 0, y: 10, filter: "blur(10px)" }}
+                            transition={{ type: "spring", stiffness: 300, damping: 30, mass: 0.8 }}
+                            className="bg-[#0a0a0a] w-full max-w-3xl rounded-[2rem] overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.05)] my-8 flex flex-col relative"
                             onClick={(e) => e.stopPropagation()}
                         >
                             <button
                                 onClick={() => setSelectedProject(null)}
-                                className="fixed top-4 right-4 md:absolute md:top-4 md:right-4 p-3 md:p-2 bg-black/80 md:bg-black/50 rounded-full text-white hover:bg-white hover:text-black transition-colors z-[110]"
+                                className="absolute top-4 right-4 p-2 bg-black/40 backdrop-blur-xl border border-white/10 rounded-full text-gray-400 hover:text-white hover:bg-white/10 hover:scale-110 transition-all z-[110]"
                             >
-                                <X size={24} />
+                                <X size={20} />
                             </button>
 
-                            <div className="relative w-full aspect-video">
+                            <div className="relative w-full aspect-[21/9] border-b border-white/5 bg-[#050505]">
                                 <img
                                     src={selectedProject.image}
                                     alt={selectedProject.title}
-                                    className="w-full h-full object-cover"
+                                    className="w-full h-full object-cover opacity-80"
                                 />
-                                <div className="absolute inset-0 bg-gradient-to-t from-card to-transparent"></div>
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent"></div>
                             </div>
 
-                            <div className="p-6 md:p-8">
-                                <h3 className="text-2xl md:text-3xl font-bold mb-2">{selectedProject.title}</h3>
-                                <p className="text-accent font-medium mb-6">{selectedProject.category}</p>
+                            <div className="p-8 md:p-12 flex flex-col flex-1">
+                                <h3 className="text-3xl font-black mb-4 tracking-tight">{selectedProject.title}</h3>
+                                <div className="flex gap-3 items-center mb-8">
+                                    <div className="px-3 py-1 bg-white/[0.03] border border-white/[0.05] rounded-full text-xs font-semibold text-gray-400 tracking-wide uppercase">
+                                        {selectedProject.category}
+                                    </div>
+                                </div>
 
-                                <p className="text-gray-300 leading-relaxed mb-6">
+                                <p className="text-gray-400 leading-relaxed text-base md:text-lg mb-12 font-light">
                                     {selectedProject.description}
                                 </p>
 
-                                <div className="flex flex-wrap gap-2 mb-8">
+                                <div className="flex flex-wrap gap-2 mb-12">
                                     {selectedProject.stack.map(tech => (
-                                        <span key={tech} className="px-3 py-1 bg-white/5 rounded-full text-sm text-gray-400">
+                                        <span key={tech} className="px-4 py-2 bg-white/[0.02] border border-white/[0.05] shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)] rounded-full text-sm font-medium text-gray-300">
                                             {tech}
                                         </span>
                                     ))}
                                 </div>
 
-                                <div className="flex flex-col sm:flex-row gap-4">
+                                <div className="flex flex-col sm:flex-row gap-4 mt-auto border-t border-white/5 pt-8">
                                     {selectedProject.LiveDemo === '#' ? (
-                                        <button disabled className="flex-1 py-3 bg-gray-700 text-gray-400 font-bold rounded-xl flex items-center justify-center gap-2 cursor-not-allowed">
+                                        <button disabled className="flex-1 py-4 bg-white/[0.02] border border-white/[0.05] text-gray-600 font-bold rounded-2xl flex items-center justify-center gap-2 cursor-not-allowed">
                                             Not Live <ExternalLink size={18} />
                                         </button>
                                     ) : (
-                                        <a href={selectedProject.LiveDemo} target="_blank" rel="noopener noreferrer" className="flex-1 py-3 bg-white text-black font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-gray-200 transition-colors">
+                                        <a href={selectedProject.LiveDemo} target="_blank" rel="noopener noreferrer" className="flex-1 py-4 bg-white text-black font-bold rounded-2xl flex items-center justify-center gap-2 hover:bg-gray-200 hover:scale-[1.02] transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)]">
                                             Live Demo <ExternalLink size={18} />
                                         </a>
                                     )}
-                                    <a href={selectedProject.SourceCode} className="flex-1 py-3 border border-gray-700 text-white font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-white/5 transition-colors">
+                                    <a href={selectedProject.SourceCode} target="_blank" rel="noopener noreferrer" className="flex-1 py-4 bg-white/[0.03] border border-white/10 text-white font-bold rounded-2xl flex items-center justify-center gap-2 hover:bg-white/10 active:scale-95 transition-all">
                                         Source Code <Github size={18} />
                                     </a>
                                 </div>

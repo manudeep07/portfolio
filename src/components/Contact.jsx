@@ -1,21 +1,40 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { fadeInUp, staggerContainer } from '../animations/variants';
-import { Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
-import emailjs from '@emailjs/browser';
-import useMobile from '../hooks/useMobile';
+import { blurFadeIn } from '../animations/variants';
+import { Send, CheckCircle, AlertCircle, XCircle } from 'lucide-react';
 import useNavTrigger from '../hooks/useNavTrigger';
+import Magnetic from './Magnetic';
 
 const Contact = () => {
     const form = useRef();
-    const isMobile = useMobile();
     const refreshKey = useNavTrigger('contact');
     const [formState, setFormState] = useState({
         name: '',
         email: '',
         message: ''
     });
+    
+    // Track touched fields for real-time validation display
+    const [touched, setTouched] = useState({
+        name: false,
+        email: false,
+        message: false
+    });
+    
     const [status, setStatus] = useState('idle'); // idle, loading, success, error
+
+    // Real-time validation logic
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+    const errors = useMemo(() => {
+        return {
+            name: formState.name.trim().length < 2 ? "Name must be at least 2 characters." : null,
+            email: !emailRegex.test(formState.email) ? "Please enter a valid email address." : null,
+            message: formState.message.trim().length < 10 ? "Message must be at least 10 characters long." : null,
+        };
+    }, [formState]);
+    
+    const isFormValid = Object.values(errors).every(err => err === null);
 
     const handleChange = (e) => {
         setFormState({
@@ -24,140 +43,168 @@ const Contact = () => {
         });
     };
 
-    const handleSubmit = async (e) => {
+    const handleBlur = (e) => {
+        setTouched({
+            ...touched,
+            [e.target.name]: true
+        });
+    };
+
+    const handleSubmit = (e) => {
         e.preventDefault();
+        
+        if (!isFormValid) {
+            setTouched({ name: true, email: true, message: true });
+            return;
+        }
+        
         setStatus('loading');
 
-        try {
-            await emailjs.send(
-                import.meta.env.VITE_SERVICE_ID,
-                import.meta.env.VITE_TEMPLATE_ID,
-                {
-                    from_name: formState.name,
-                    from_email: formState.email,
-                    message: formState.message,
-                    to_name: 'Narasingu Manudeep' // Optional: Can be dynamic or hardcoded
-                },
-                import.meta.env.VITE_PUBLIC_KEY
-            );
-
+        const subject = encodeURIComponent(`Message from ${formState.name} (${formState.email})`);
+        const body = encodeURIComponent(formState.message);
+        
+        // Simulate network request for premium feedback UX
+        setTimeout(() => {
+            window.location.href = `mailto:manudeep1000@gmail.com?subject=${subject}&body=${body}`;
+            
             setStatus('success');
             setFormState({ name: '', email: '', message: '' });
-            setTimeout(() => setStatus('idle'), 3000);
-        } catch (error) {
-            console.error('EmailJS Error:', error);
-            setStatus('error');
-            setTimeout(() => setStatus('idle'), 3000);
-        }
+            setTouched({ name: false, email: false, message: false });
+            
+            setTimeout(() => setStatus('idle'), 4000);
+        }, 800);
     };
 
     return (
-        <section id="contact" className="py-16 md:py-24 bg-gradient-to-b from-black to-gray-900 text-white">
-            <div className="container mx-auto px-6 max-w-4xl">
+        <section id="contact" className="py-24 scroll-mt-20 bg-black text-white relative border-t border-white/5">
+            <div className="container mx-auto px-6 max-w-6xl relative z-10">
                 <motion.div
                     key={refreshKey}
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ amount: 0.3, once: true }}
-                    className="text-center mb-16"
+                    viewport={{ amount: 0.2, once: true }}
+                    className="flex flex-col items-center"
                 >
-                    <motion.h2 variants={fadeInUp} className="text-3xl md:text-5xl font-bold mb-4">
-                        Get In Touch
-                    </motion.h2>
-                    <motion.p variants={fadeInUp} className="text-gray-400">
-                        I am currently open to new opportunities. Feel free to reach out.
-                    </motion.p>
+                    <motion.div variants={blurFadeIn} className="text-center mb-16">
+                        <motion.h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
+                            Let's Connect
+                        </motion.h2>
+                        <motion.p className="text-gray-400 text-lg max-w-2xl mx-auto font-light">
+                            Open to deploying powerful projects. Send over an abstract and let's structure a build.
+                        </motion.p>
+                    </motion.div>
+
+                    <motion.div 
+                        variants={blurFadeIn}
+                        className="w-full max-w-2xl"
+                    >
+                        <div className="bg-[#050505] p-8 md:p-12 rounded-3xl border border-white/[0.05] shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)]">
+                            <form onSubmit={handleSubmit} ref={form} className="space-y-6" noValidate>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="relative">
+                                        <label htmlFor="name" className="block text-xs font-semibold tracking-wider uppercase text-gray-500 mb-2 ml-1">Name</label>
+                                        <input
+                                            type="text"
+                                            id="name"
+                                            name="name"
+                                            value={formState.name}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            className={`
+                                                w-full bg-white/[0.02] border rounded-2xl px-5 py-4 text-white placeholder-gray-600 transition-all duration-300
+                                                focus:outline-none focus:ring-1 focus:bg-white/[0.04] shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)]
+                                                ${touched.name && errors.name 
+                                                    ? 'border-red-500/30 focus:border-red-500 focus:ring-red-500/30' 
+                                                    : 'border-white/5 focus:border-white/30 focus:ring-white/10 hover:border-white/10'}
+                                            `}
+                                            placeholder="Jane Doe"
+                                        />
+                                    </div>
+                                    
+                                    <div className="relative">
+                                        <label htmlFor="email" className="block text-xs font-semibold tracking-wider uppercase text-gray-500 mb-2 ml-1">Email</label>
+                                        <input
+                                            type="email"
+                                            id="email"
+                                            name="email"
+                                            value={formState.email}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            className={`
+                                                w-full bg-white/[0.02] border rounded-2xl px-5 py-4 text-white placeholder-gray-600 transition-all duration-300
+                                                focus:outline-none focus:ring-1 focus:bg-white/[0.04] shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)]
+                                                ${touched.email && errors.email 
+                                                    ? 'border-red-500/30 focus:border-red-500 focus:ring-red-500/30' 
+                                                    : 'border-white/5 focus:border-white/30 focus:ring-white/10 hover:border-white/10'}
+                                            `}
+                                            placeholder="hello@example.com"
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="relative">
+                                    <label htmlFor="message" className="block text-xs font-semibold tracking-wider uppercase text-gray-500 mb-2 ml-1">Message</label>
+                                    <textarea
+                                        id="message"
+                                        name="message"
+                                        rows="5"
+                                        value={formState.message}
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        className={`
+                                            w-full bg-white/[0.02] border rounded-2xl px-5 py-4 text-white resize-none placeholder-gray-600 transition-all duration-300
+                                            focus:outline-none focus:ring-1 focus:bg-white/[0.04] shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)]
+                                            ${touched.message && errors.message 
+                                                ? 'border-red-500/30 focus:border-red-500 focus:ring-red-500/30' 
+                                                : 'border-white/5 focus:border-white/30 focus:ring-white/10 hover:border-white/10'}
+                                        `}
+                                        placeholder="How can I help you?"
+                                    ></textarea>
+                                </div>
+
+                                <Magnetic strength={0.1}>
+                                    <button
+                                        type="submit"
+                                        disabled={!isFormValid || status === 'loading'}
+                                        className={`
+                                            w-full py-5 font-bold text-[15px] rounded-2xl flex items-center justify-center gap-3 transition-all duration-500 active:scale-[0.98]
+                                            ${isFormValid 
+                                                ? 'bg-white text-black hover:bg-gray-200 shadow-[0_4px_20px_rgba(255,255,255,0.1)]' 
+                                                : 'bg-white/[0.03] text-gray-600 cursor-not-allowed border border-white/[0.05]'}
+                                        `}
+                                    >
+                                        {status === 'loading' ? (
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-5 h-5 border-2 border-black/20 border-t-black rounded-full animate-spin" />
+                                                Routing...
+                                            </div>
+                                        ) : (
+                                            <>
+                                                Send Transmission
+                                                <Send size={18} className="ml-1" />
+                                            </>
+                                        )}
+                                    </button>
+                                </Magnetic>
+                            </form>
+
+                            <AnimatePresence>
+                                {status === 'success' && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                                        exit={{ opacity: 0, scale: 0.95 }}
+                                        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                                        className="mt-6 p-5 bg-white/[0.02] border border-white/10 rounded-2xl flex items-center justify-center gap-3 text-white font-medium"
+                                    >
+                                        <CheckCircle size={20} className="text-white" />
+                                        <span>Ready! Client launched.</span>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </div>
+                    </motion.div>
                 </motion.div>
-
-                <div className="bg-card p-8 md:p-12 rounded-3xl border border-gray-800 shadow-2xl">
-                    <form onSubmit={handleSubmit} ref={form} className="space-y-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <label htmlFor="name" className="block text-sm font-medium text-gray-400 mb-2">Name</label>
-                                <input
-                                    type="text"
-                                    id="name"
-                                    name="name"
-                                    required
-                                    value={formState.name}
-                                    onChange={handleChange}
-                                    className="w-full bg-black/50 border border-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all text-white placeholder-gray-600"
-                                    placeholder="John Doe"
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="email" className="block text-sm font-medium text-gray-400 mb-2">Email</label>
-                                <input
-                                    type="email"
-                                    id="email"
-                                    name="email"
-                                    required
-                                    value={formState.email}
-                                    onChange={handleChange}
-                                    className="w-full bg-black/50 border border-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all text-white placeholder-gray-600"
-                                    placeholder="abc@email.com"
-                                />
-                            </div>
-                        </div>
-
-                        <div>
-                            <label htmlFor="message" className="block text-sm font-medium text-gray-400 mb-2">Message</label>
-                            <textarea
-                                id="message"
-                                name="message"
-                                required
-                                rows="6"
-                                value={formState.message}
-                                onChange={handleChange}
-                                className="w-full bg-black/50 border border-gray-800 rounded-xl px-4 py-3 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all text-white resize-none placeholder-gray-600"
-                                placeholder="Your message here..."
-                            ></textarea>
-                        </div>
-
-                        <button
-                            type="submit"
-                            disabled={status === 'loading'}
-                            className="w-full py-4 bg-white text-black font-bold rounded-xl hover:bg-gray-200 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                        >
-                            {status === 'loading' ? (
-                                <>
-                                    <Loader2 className="animate-spin" size={20} />
-                                    Sending...
-                                </>
-                            ) : (
-                                <>
-                                    Send Message
-                                    <Send size={20} />
-                                </>
-                            )}
-                        </button>
-                    </form>
-
-                    <AnimatePresence>
-                        {status === 'success' && (
-                            <motion.div
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0 }}
-                                className="mt-6 p-4 bg-green-500/10 border border-green-500/20 rounded-xl flex items-center justify-center gap-2 text-green-500"
-                            >
-                                <CheckCircle size={20} />
-                                <span>Message sent successfully! I'll get back to you soon.</span>
-                            </motion.div>
-                        )}
-                        {status === 'error' && (
-                            <motion.div
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0 }}
-                                className="mt-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center justify-center gap-2 text-red-500"
-                            >
-                                <AlertCircle size={20} />
-                                <span>Failed to send message. Please try again later.</span>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                </div>
             </div>
         </section>
     );
