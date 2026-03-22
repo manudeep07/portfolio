@@ -2,7 +2,6 @@ import { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fadeInUp, staggerContainer } from '../animations/variants';
 import { Send, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
-import emailjs from '@emailjs/browser';
 
 const Contact = () => {
     const form = useRef();
@@ -25,23 +24,19 @@ const Contact = () => {
         setStatus('loading');
 
         try {
-            await emailjs.send(
-                import.meta.env.VITE_SERVICE_ID,
-                import.meta.env.VITE_TEMPLATE_ID,
-                {
-                    from_name: formState.name,
-                    from_email: formState.email,
-                    message: formState.message,
-                    to_name: 'Narasingu Manudeep' // Optional: Can be dynamic or hardcoded
-                },
-                import.meta.env.VITE_PUBLIC_KEY
+            const subject = encodeURIComponent(`Contact from ${formState.name}`);
+            const body = encodeURIComponent(
+                `Name: ${formState.name}\nEmail: ${formState.email}\n\nMessage:\n${formState.message}`
             );
+            
+            // Redirect using mailto
+            window.location.href = `mailto:manudeep1000@gmail.com?subject=${subject}&body=${body}`;
 
             setStatus('success');
             setFormState({ name: '', email: '', message: '' });
             setTimeout(() => setStatus('idle'), 3000);
         } catch (error) {
-            console.error('EmailJS Error:', error);
+            console.error('Submission Error:', error);
             setStatus('error');
             setTimeout(() => setStatus('idle'), 3000);
         }
