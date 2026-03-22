@@ -1,89 +1,130 @@
-import { motion } from 'framer-motion';
-import { blurFadeIn, staggerContainer } from '../animations/variants';
-import { Code, Terminal, Cpu } from 'lucide-react';
-import useNavTrigger from '../hooks/useNavTrigger';
+import { motion } from "framer-motion";
+import { Code, Terminal, Cpu } from "lucide-react";
+import useNavTrigger from "../hooks/useNavTrigger";
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: (i = 1) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.15,
+      duration: 0.8,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  }),
+};
 
 const About = () => {
-    const refreshKey = useNavTrigger('about');
+  const refreshKey = useNavTrigger("about");
 
-    return (
-        <section id="about" className="py-24 scroll-mt-20 bg-black text-white relative overflow-hidden">
-            {/* Extremely dark structured radial core */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(120,119,198,0.1),transparent)] pointer-events-none"></div>
+  return (
+    <section
+      id="about"
+      className="min-h-screen flex items-center pt-20 pb-12 bg-gradient-to-b from-[#0f172a] to-black text-white relative overflow-hidden"
+    >
+      {/* 🌌 Soft Gradient Glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(120,119,198,0.15),transparent)] pointer-events-none"></div>
 
-            <div className="container mx-auto px-6 max-w-6xl relative z-10">
-                <motion.div
-                    key={refreshKey}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ amount: 0.3, once: true }}
-                    variants={staggerContainer}
-                    className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24"
-                >
-                    {/* Text Content */}
-                    <motion.div className="lg:w-1/2">
-                        <motion.div variants={blurFadeIn} className="flex items-center gap-3 mb-6">
-                            <span className="h-px bg-white/20 w-12"></span>
-                            <h2 className="text-sm font-semibold tracking-[0.2em] text-gray-400 uppercase">
-                                Background
-                            </h2>
-                        </motion.div>
-                        
-                        <motion.h3 variants={blurFadeIn} className="text-4xl md:text-5xl font-bold mb-8 tracking-tight">
-                            Driven by architecture, obsessed with detail.
-                        </motion.h3>
+      <div className="container mx-auto px-6 max-w-6xl relative z-10">
+        <motion.div
+          key={refreshKey}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ amount: 0.3, once: true }}
+          className="flex flex-col lg:flex-row items-center gap-16 lg:gap-24"
+        >
+          {/* LEFT TEXT */}
+          <div className="lg:w-1/2">
+            
+            {/* Section Label */}
+            <motion.div
+              variants={fadeUp}
+              custom={1}
+              className="flex items-center gap-3 mb-6"
+            >
+              <span className="h-px bg-white/20 w-12"></span>
+              <h2 className="text-sm font-semibold tracking-[0.2em] text-gray-400 uppercase">
+                About Me
+              </h2>
+            </motion.div>
 
-                        <div className="space-y-6 text-gray-400 text-lg font-light leading-relaxed">
-                            <motion.p variants={blurFadeIn}>
-                                I am a passionate MERN Stack Web Developer focused on building highly scalable, zero-latency web applications. My journey began with curiosity about how the web works at an architectural level, which naturally evolved into full-stack engineering.
-                            </motion.p>
-                            <motion.p variants={blurFadeIn}>
-                                I specialize in building deterministic user interfaces with React and engineering asynchronous backend architectures using Node.js, Express, and MongoDB. Beyond writing execution contexts, I am actively exploring DevOps orchestration layers (CI/CD, remote environments) to command the full lifecycle of software deployments.
-                            </motion.p>
-                        </div>
-                    </motion.div>
+            {/* Heading */}
+            <motion.h3
+              variants={fadeUp}
+              custom={2}
+              className="text-4xl md:text-5xl font-bold mb-8 tracking-tight"
+            >
+              From curiosity to engineering scalable systems.
+            </motion.h3>
 
-                    {/* Visual Content / Vercel-style Grid Cards */}
-                    <motion.div className="lg:w-1/2 relative w-full h-full">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 group/list relative z-10">
-                            <motion.div 
-                                variants={blurFadeIn} 
-                                className="bg-white/[0.02] p-8 rounded-3xl border border-white/[0.05] shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)] hover:bg-white/[0.04] hover:border-white/10 transition-all duration-500 group/item group-hover/list:opacity-50 hover:!opacity-100 flex flex-col"
-                            >
-                                <div className="p-3 bg-white/5 border border-white/5 rounded-2xl w-fit mb-6">
-                                    <Code className="text-gray-300 transition-transform group-hover/item:scale-110 duration-500" size={24} />
-                                </div>
-                                <h3 className="font-semibold text-xl text-white mb-2 tracking-tight">Frontend</h3>
-                                <p className="text-gray-500 text-sm font-medium leading-relaxed">Crafting responsive, high-framerate UIs with React.</p>
-                            </motion.div>
+            {/* Content */}
+            <div className="space-y-6 text-gray-400 text-lg leading-relaxed">
+              <motion.p variants={fadeUp} custom={3}>
+                I’m Narasingu Manudeep, a Computer Science undergraduate from
+                Nellore, Andhra Pradesh, currently pursuing my Bachelor of
+                Technology at Lovely Professional University with a strong
+                academic foundation.
+              </motion.p>
 
-                            <motion.div 
-                                variants={blurFadeIn} 
-                                className="bg-white/[0.02] p-8 rounded-3xl border border-white/[0.05] shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)] hover:bg-white/[0.04] hover:border-white/10 transition-all duration-500 group/item group-hover/list:opacity-50 hover:!opacity-100 flex flex-col sm:mt-12"
-                            >
-                                <div className="p-3 bg-white/5 border border-white/5 rounded-2xl w-fit mb-6">
-                                    <Terminal className="text-gray-300 transition-transform group-hover/item:scale-110 duration-500" size={24} />
-                                </div>
-                                <h3 className="font-semibold text-xl text-white mb-2 tracking-tight">Backend</h3>
-                                <p className="text-gray-500 text-sm font-medium leading-relaxed">Building asynchronous APIs and secure microservices.</p>
-                            </motion.div>
+              <motion.p variants={fadeUp} custom={4}>
+                I am passionate about full-stack development and problem
+                solving, with hands-on experience in technologies like React,
+                Node.js, Express, and MongoDB. I’ve built real-world
+                applications such as a Virtual Classroom Platform and a
+                Learning Management System, gaining practical experience in
+                scalable system design.
+              </motion.p>
 
-                            <motion.div 
-                                variants={blurFadeIn} 
-                                className="bg-white/[0.02] p-8 rounded-3xl border border-white/[0.05] shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)] hover:bg-white/[0.04] hover:border-white/10 transition-all duration-500 group/item group-hover/list:opacity-50 hover:!opacity-100 flex flex-col sm:-mt-12 sm:col-span-2 sm:w-1/2 sm:mx-auto"
-                            >
-                                <div className="p-3 bg-white/5 border border-white/5 rounded-2xl w-fit mb-6">
-                                    <Cpu className="text-gray-300 transition-transform group-hover/item:scale-110 duration-500" size={24} />
-                                </div>
-                                <h3 className="font-semibold text-xl text-white mb-2 tracking-tight">Optimization</h3>
-                                <p className="text-gray-500 text-sm font-medium leading-relaxed">Targeting zero-latency execution contexts natively.</p>
-                            </motion.div>
-                        </div>
-                    </motion.div>
-                </motion.div>
+              <motion.p variants={fadeUp} custom={5}>
+                Alongside development, I have solved over 200 coding problems,
+                strengthening my logical thinking and consistency. I’m a quick
+                learner, collaborative team player, and constantly exploring
+                ways to grow as a software engineer.
+              </motion.p>
             </div>
-        </section>
-    );
+          </div>
+
+          {/* RIGHT CARDS */}
+          <div className="lg:w-1/2 w-full">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 group/list">
+
+              {/* FRONTEND */}
+              <motion.div
+                variants={fadeUp}
+                custom={3}
+                className="bg-white/[0.03] p-8 rounded-3xl border border-white/[0.08] backdrop-blur-xl hover:bg-white/[0.06] hover:border-white/20 transition-all duration-500 group-hover/list:opacity-50 hover:!opacity-100"
+              >
+                <div className="p-3 bg-white/10 rounded-xl w-fit mb-6">
+                  <Code size={24} />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Frontend</h3>
+                <p className="text-gray-400 text-sm">
+                  Building responsive, high-performance interfaces with React and modern UI systems.
+                </p>
+              </motion.div>
+
+              {/* BACKEND */}
+              <motion.div
+                variants={fadeUp}
+                custom={4}
+                className="bg-white/[0.03] p-8 rounded-3xl border border-white/[0.08] backdrop-blur-xl hover:bg-white/[0.06] hover:border-white/20 transition-all duration-500 sm:mt-12 group-hover/list:opacity-50 hover:!opacity-100"
+              >
+                <div className="p-3 bg-white/10 rounded-xl w-fit mb-6">
+                  <Terminal size={24} />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">Backend</h3>
+                <p className="text-gray-400 text-sm">
+                  Designing scalable APIs and asynchronous architectures using Node.js and Express.
+                </p>
+              </motion.div>
+
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
 };
 
 export default About;

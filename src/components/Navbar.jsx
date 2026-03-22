@@ -52,7 +52,9 @@ const Navbar = () => {
         const targetElement = document.getElementById(targetId);
 
         if (targetElement) {
-            const headerOffset = 80;
+            // Full screen sections (home, about) should snap exactly to the top (0 offset)
+            // so their min-h-screen layout fits precisely under the navbar.
+            const headerOffset = (targetId === 'home' || targetId === 'about') ? 0 : 80;
             const elementPosition = targetElement.getBoundingClientRect().top;
             const offsetPosition = elementPosition + window.scrollY - headerOffset;
 
