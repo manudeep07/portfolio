@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { navVariants } from '../animations/variants';
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
@@ -18,17 +18,19 @@ const Navbar = () => {
         const sections = ['home', 'about', 'skills', 'projects', 'certifications', 'education', 'contact'];
         const observerOptions = {
             root: null,
-            rootMargin: '-80px 0px -50% 0px',
+            rootMargin: '-15% 0px -75% 0px',
             threshold: 0
         };
-
+ 
         const observerCallback = (entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    setActiveSection(entry.target.id);
-                }
-            });
+            // Find the first intersecting entry (with the refined rootMargin, 
+            // the focus is restricted to the top of the viewport)
+            const intersecting = entries.find(entry => entry.isIntersecting);
+            if (intersecting) {
+                setActiveSection(intersecting.target.id);
+            }
         };
+
 
         const observer = new IntersectionObserver(observerCallback, observerOptions);
 
@@ -83,15 +85,15 @@ const Navbar = () => {
             variants={navVariants}
             initial="hidden"
             animate="visible"
-            className={`fixed w-full z-50 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${scrolled ? 'bg-black/70 backdrop-blur-2xl py-4 shadow-[0_1px_0_rgba(255,255,255,0.05)]' : 'bg-transparent py-6'}`}
+            className={`fixed w-full z-50 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${scrolled ? 'bg-background/80 backdrop-blur-xl py-4 shadow-[0_1px_0_rgba(255,255,255,0.05)]' : 'bg-transparent py-6'}`}
         >
-            <div className="container mx-auto px-6 max-w-6xl flex justify-between items-center">
+            <div className="container mx-auto px-6 md:px-16 max-w-6xl flex justify-between items-center">
                 <a
                     href="#"
                     onClick={(e) => handleNavClick(e, '#home')}
-                    className="text-xl font-bold tracking-tighter text-white hover:opacity-70 transition-opacity"
+                    className="text-2xl font-black tracking-tighter text-white hover:text-accent transition-colors italic"
                 >
-                    M.
+                    M<span className="text-accent">.</span>
                 </a>
 
                 {/* Desktop Menu */}
@@ -101,8 +103,8 @@ const Navbar = () => {
                             key={link.name}
                             href={link.href}
                             onClick={(e) => handleNavClick(e, link.href)}
-                            className={`text-xs font-semibold tracking-wide uppercase transition-colors duration-500 ${
-                                activeSection === link.href.substring(1) ? 'text-white' : 'text-gray-500 hover:text-gray-300'
+                            className={`text-[10px] font-bold tracking-[0.2em] uppercase transition-colors duration-300 ${
+                                activeSection === link.href.substring(1) ? 'text-accent' : 'text-neutral-500 hover:text-white'
                             }`}
                         >
                             {link.name}
@@ -112,7 +114,7 @@ const Navbar = () => {
                     <a
                         href={cv_12318201}
                         download="Narasingu_Manudeep_CV.pdf"
-                        className="px-5 py-2 text-xs font-bold text-black bg-white rounded-full hover:scale-105 active:scale-95 hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] transition-all duration-300"
+                        className="px-6 py-2 text-[10px] font-black uppercase tracking-widest text-white bg-accent rounded-sm hover:bg-red-700 active:scale-95 transition-all duration-300 shadow-lg shadow-accent/20"
                     >
                         Download CV
                     </a>
@@ -120,37 +122,41 @@ const Navbar = () => {
 
                 {/* Mobile Toggle */}
                 <div className="md:hidden">
-                    <button onClick={() => setIsOpen(!isOpen)} className="text-gray-400 hover:text-white transition-colors">
+                    <button onClick={() => setIsOpen(!isOpen)} className="text-neutral-400 hover:text-white transition-colors">
                         {isOpen ? <X size={24} /> : <Menu size={24} />}
                     </button>
                 </div>
             </div>
 
             {/* Mobile Menu */}
-            {isOpen && (
-                <motion.div
-                    initial={{ opacity: 0, y: -10, filter: "blur(5px)" }}
-                    animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                    className="md:hidden bg-black/95 backdrop-blur-3xl border-t border-white/5 mt-4 absolute w-full"
-                >
-                    <div className="px-6 py-8 flex flex-col space-y-6">
-                        {links.map((link) => (
-                            <a
-                                key={link.name}
-                                href={link.href}
-                                onClick={(e) => handleNavClick(e, link.href)}
-                                className={`text-lg font-medium tracking-tight transition-colors ${
-                                    activeSection === link.href.substring(1) ? 'text-white' : 'text-gray-500 hover:text-white'
-                                }`}
-                            >
-                                {link.name}
-                            </a>
-                        ))}
-                    </div>
-                </motion.div>
-            )}
+            <AnimatePresence>
+                {isOpen && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+                        className="md:hidden bg-background/98 backdrop-blur-3xl border-t border-white/5 absolute w-full shadow-2xl"
+                    >
+                        <div className="px-6 py-10 flex flex-col space-y-8">
+                            {links.map((link) => (
+                                <a
+                                    key={link.name}
+                                    href={link.href}
+                                    onClick={(e) => handleNavClick(e, link.href)}
+                                    className={`text-xl font-black uppercase italic tracking-tighter transition-colors ${
+                                        activeSection === link.href.substring(1) ? 'text-accent' : 'text-neutral-500 hover:text-white'
+                                    }`}
+                                >
+                                    {link.name}
+                                </a>
+                            ))}
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </motion.nav>
+
     );
 };
 

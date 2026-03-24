@@ -25,35 +25,37 @@ const Hero = () => {
       key={refreshKey}
       className="min-h-screen flex items-center pt-20 relative overflow-hidden scroll-mt-20"
     >
-      {/* 🌌 Background Gradient (fixed darkness issue) */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.25),rgba(15,23,42,0.95))]" />
+      {/* 🌌 Background Gradient */}
+      <div className="absolute inset-0 bg-[#050505]" />
 
-      {/* 🌌 Glow Layer (fake depth / 3D feel) */}
-      <div className="absolute top-1/2 left-1/2 w-[500px] h-[500px] bg-purple-500/10 blur-[120px] rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
+      {/* 🌌 Glow Layer */}
+      <div className="absolute top-1/2 left-1/2 w-[500px] h-[500px] bg-red-600/5 blur-[120px] rounded-full -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
 
-      <div className="container mx-auto px-6 max-w-6xl relative z-10">
+      <div className="container mx-auto px-6 md:px-16 max-w-6xl relative z-10">
         <div className="flex flex-col-reverse md:flex-row items-center justify-between gap-12">
           
           {/* LEFT CONTENT */}
-          <div className="md:w-1/2">
+          <div className="md:w-3/5">
             
             {/* 🔥 Heading */}
-            <motion.h1
+            <motion.div
               variants={fadeUp}
               initial="hidden"
               animate="visible"
               custom={1}
-              className="text-4xl md:text-6xl lg:text-7xl font-black mb-6 leading-[1.1]"
+              className="mb-8"
             >
-              <span className="text-blue-300 text-lg block mb-3">
-                Hi, I am
-              </span>
-
-              <span className="text-white">Narasingu Manudeep</span>
-
-              <br />
-
-            </motion.h1>
+              <div className="flex items-center gap-4 mb-4">
+                <div className="h-[2px] w-8 bg-red-600 rounded-full" />
+                <span className="text-[10px] uppercase font-bold tracking-[0.3em] text-red-500">
+                  Engineer & Designer
+                </span>
+              </div>
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-[0.9] tracking-tighter uppercase italic">
+                Narasingu <br />
+                <span className="text-neutral-700">Manudeep</span>
+              </h1>
+            </motion.div>
 
             {/* 🔥 Description */}
             <motion.p
@@ -61,16 +63,16 @@ const Hero = () => {
               initial="hidden"
               animate="visible"
               custom={2}
-              className="text-gray-400 text-lg md:text-xl max-w-xl mb-10 leading-relaxed"
+              className="text-neutral-400 text-lg md:text-xl max-w-xl mb-12 leading-relaxed tracking-tight"
             >
-              Building digital experiences with precision and intent.  
+              Building high-octane digital experiences with precision.  
               I engineer scalable, high-performance web applications using the MERN stack,
               focusing on{" "}
-              <span className="text-gray-200 font-medium">
-                seamless user experience
+              <span className="text-white font-bold italic">
+                seamless UX
               </span>{" "}
               and{" "}
-              <span className="text-gray-200 font-medium">
+              <span className="text-white font-bold italic">
                 clean architecture
               </span>.
             </motion.p>
@@ -81,21 +83,21 @@ const Hero = () => {
               initial="hidden"
               animate="visible"
               custom={3}
-              className="flex flex-col sm:flex-row items-center sm:items-center justify-start gap-4 sm:gap-6"
+              className="flex flex-col sm:flex-row items-center justify-start gap-4 sm:gap-8"
             >
               <a
                 href="#projects"
-                className="group relative px-8 py-4 w-full sm:w-auto bg-white text-black font-bold rounded-full flex justify-center items-center gap-2 hover:scale-105 active:scale-95 transition-transform duration-300 shadow-[0_0_20px_rgba(255,255,255,0.2)] hover:shadow-[0_0_30px_rgba(255,255,255,0.4)]"
+                className="group relative px-10 py-4 w-full sm:w-auto bg-red-600 text-white font-black text-[12px] uppercase tracking-[0.2em] rounded-sm flex justify-center items-center gap-3 hover:bg-red-700 active:scale-95 transition-all duration-300 shadow-xl shadow-red-600/20"
               >
-                View Projects
-                <ArrowRight className="group-hover:translate-x-1 transition-transform" />
+                Launch Projects
+                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
               </a>
 
               <a
                 href="#contact"
-                className="px-8 py-4 w-full sm:w-auto border border-white/10 text-gray-300 rounded-full text-center hover:bg-white/10 hover:text-white hover:scale-105 active:scale-95 transition-all duration-300 backdrop-blur-sm"
+                className="px-10 py-4 w-full sm:w-auto border border-white/10 text-neutral-300 font-bold text-[12px] uppercase tracking-[0.2em] rounded-sm text-center hover:bg-white/5 hover:text-white active:scale-95 transition-all duration-300"
               >
-                Contact Me
+                Contact
               </a>
             </motion.div>
 
@@ -105,54 +107,48 @@ const Hero = () => {
               initial="hidden"
               animate="visible"
               custom={4}
-              className="mt-12 flex items-center justify-center md:justify-start gap-6 text-gray-500"
+              className="mt-16 flex items-center justify-center md:justify-start gap-8"
             >
-              <a href="https://github.com/manudeep07" target="_blank" className="hover:text-white hover:-translate-y-1 hover:scale-110 transition-all duration-300">
-                <Github size={24} />
+              <a href="https://github.com/manudeep07" target="_blank" className="text-neutral-600 hover:text-white transition-colors">
+                <Github size={20} />
               </a>
 
-              <a href="https://linkedin.com/in/manudeep07" target="_blank" className="hover:text-[#0A66C2] hover:-translate-y-1 hover:scale-110 transition-all duration-300">
-                <Linkedin size={24} />
+              <a href="https://linkedin.com/in/manudeep07" target="_blank" className="text-neutral-600 hover:text-white transition-colors">
+                <Linkedin size={20} />
               </a>
 
-              <a href="mailto:manudeep1000@gmail.com" className="hover:text-[#EA4335] hover:-translate-y-1 hover:scale-110 transition-all duration-300">
-                <Mail size={24} />
+              <a href="mailto:manudeep1000@gmail.com" className="text-neutral-600 hover:text-white transition-colors">
+                <Mail size={20} />
               </a>
             </motion.div>
           </div>
 
           {/* RIGHT IMAGE */}
-          <div className="md:w-1/2 flex justify-center relative">
+          <div className="md:w-2/5 flex justify-center relative">
             
-            {/* Glow */}
-            <div className="absolute w-80 h-80 bg-purple-500/20 blur-[120px] rounded-full" />
-
-            <div className="relative w-64 h-64 md:w-96 md:h-96">
-              {/* Floating Image */}
+            <div className="relative w-72 h-72 md:w-[450px] md:h-[450px]">
+              {/* Image Frame */}
               <motion.div
-                animate={{ y: [0, -20, 0] }}
-                transition={{
-                  duration: 6,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="w-full h-full rounded-full overflow-hidden border border-white/10 bg-white/5 backdrop-blur-xl shadow-[0_0_60px_rgba(100,100,255,0.2)]"
+                initial={{ opacity: 0, scale: 0.9, rotate: -5 }}
+                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
+                className="w-full h-full rounded-2xl overflow-hidden border border-white/5 bg-[#0A0A0A] shadow-2xl grayscale hover:grayscale-0 transition-all duration-1000"
               >
                 <img
                   src={profileImg}
                   alt="Manudeep"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover scale-110"
                 />
               </motion.div>
+              
+              {/* Decorative Corner */}
+              <div className="absolute -top-4 -right-4 w-24 h-24 border-t-4 border-r-4 border-red-600/30 rounded-tr-3xl" />
+              <div className="absolute -bottom-4 -left-4 w-24 h-24 border-b-4 border-l-4 border-white/10 rounded-bl-3xl" />
             </div>
-
-            {/* Name */}
-            <p className="absolute -bottom-10 text-white/50 font-semibold uppercase tracking-[0.1em] hover:text-white hover:tracking-[0.25em] transition-all duration-500 cursor-default">
-              Manudeep Narasingu
-            </p>
           </div>
         </div>
       </div>
+
     </section>
   );
 };

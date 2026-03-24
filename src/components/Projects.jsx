@@ -1,179 +1,229 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { blurFadeIn, staggerContainer } from '../animations/variants';
-import { X, ExternalLink, Github } from 'lucide-react';
-import useNavTrigger from '../hooks/useNavTrigger';
+import { useState } from "react";
+import {
+  motion,
+  AnimatePresence,
+} from "framer-motion";
+import { X, ExternalLink, Github } from "lucide-react";
 
 const projects = [
-    {
-        id: 1,
-        title: 'Collaborative Online Notepad',
-        category: 'PHP / JavaScript / Ratchet',
-        image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        description: 'This project is a real-time collaborative notepad built using PHP, JavaScript, and the Ratchet WebSocket library. It allows multiple users to edit the same document simultaneously and see updates instantly without refreshing the page.',
-        LiveDemo: '#',
-        SourceCode: 'https://github.com/manudeep07/collaborative-notepad',
-        stack: ['PHP', 'JavaScript', 'Ratchet']
-    },
-    {
-        id: 2,
-        title: 'LMS',
-        category: 'MERN/tailwind',
-        image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        description: 'This project is a full-stack Learning Management System (LMS) inspired by platforms like Udemy and Coursera. It enables users to browse, purchase, and learn from online courses through a secure and seamless digital learning experience. The platform integrates modern authentication and payment solutions to ensure scalability, security, and a smooth user journey from enrollment to course completion.',
-        LiveDemo: 'https://edulite.manudeep.xyz/',
-        SourceCode: 'https://github.com/manudeep07/LMS',
-        stack: ['MERN', 'Clerk Auth', 'Stripe Payment']
-    },
-    {
-        id: 3,
-        title: 'Virtual Classroom',
-        category: 'MERN/WEbrtc/Socket.io',
-        image: 'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-        description: 'A web-based virtual classroom platform where teachers can create classrooms, share a unique class code, post announcements, assignments, study materials, and conduct live sessions.',
-        LiveDemo: '#',
-        SourceCode: 'https://github.com/manudeep07/virtual-classroom',
-        stack: ['MERN', 'WebRTC', 'Socket.io']
-    },
+  {
+    id: 1,
+    title: "SyncNote",
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f",
+    description: "Real-time collaborative editor with seamless synchronization and multi-user support.",
+    longDescription: "SyncNote is a high-performance collaborative environment built for teams. It features real-time cursor tracking, conflict resolution, and a sleek dark interface designed for focus.",
+    tags: ["php","mysql","bootstrap","js"],
+    github: "https://github.com/manudeep07/collaborative-notepad",
+    live: "#"
+  },
+  {
+    id: 2,
+    title: "EduLite",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71",
+    description: "Modern LMS platform for streamlined learning management and progress tracking.",
+    longDescription: "EduLite simplifies the educational experience with intuitive course management, interactive quizzes, and comprehensive analytics for both students and instructors.",
+    tags: ["React", "Node.js", "MongoDB", "Tailwind","clerk","stripe api"],
+    github: "https://github.com/manudeep07/LMS",
+    live: "#"
+  },
+  {
+    id: 3,
+    title: "ClassNova",
+    image: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b",
+    description: "Virtual classroom system with integrated video conferencing and whiteboarding.",
+    longDescription: "ClassNova brings the classroom to the screen. It integrates low-latency video, shared digital whiteboards, and breakout rooms to foster an engaging learning environment.",
+    tags: ["React", "Node.js", "Socket.io","webRTC", "Tailwind"],
+    github: "https://github.com/manudeep07/virtual-classroom",
+    live: "#"
+  }
 ];
 
-const Projects = () => {
-    const [selectedProject, setSelectedProject] = useState(null);
-    const refreshKey = useNavTrigger('projects');
-
-    return (
-        <section id="projects" className="py-24 scroll-mt-20 bg-black text-white relative">
-            <div className="container mx-auto px-6 max-w-6xl relative z-10">
-                <motion.div
-                    key={refreshKey}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ amount: 0.1, once: true }}
-                    variants={staggerContainer}
-                >
-                    <div className="mb-20 text-center">
-                        <motion.h2 variants={blurFadeIn} className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
-                            Selected Works
-                        </motion.h2>
-                        <motion.p variants={blurFadeIn} className="text-gray-400 text-lg max-w-2xl mx-auto font-light">
-                            Production-grade applications built resolving complex digital architecture logic.
-                        </motion.p>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 group/list">
-                        {projects.map((project) => (
-                            <motion.div
-                                key={project.id}
-                                variants={blurFadeIn}
-                                onClick={() => setSelectedProject(project)}
-                                className={`
-                                    group/item relative cursor-pointer gpu-accelerated flex flex-col h-full
-                                    bg-white/[0.02] p-4 rounded-3xl border border-white/[0.05] 
-                                    shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)] transition-all duration-500 
-                                    hover:bg-white/[0.04] hover:border-white/10 group-hover/list:opacity-40 hover:!opacity-100
-                                `}
-                            >
-                                <div className="relative overflow-hidden rounded-2xl aspect-[4/3] bg-[#0a0a0a] border border-white/5 mb-5 select-none">
-                                    <img
-                                        src={project.image}
-                                        alt={project.title}
-                                        className="object-cover w-full h-full transform group-hover/item:scale-[1.03] transition-transform duration-[1s] ease-[cubic-bezier(0.22,1,0.36,1)]"
-                                    />
-                                    {/* Ultra subtle gradient overlay on hover */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover/item:opacity-100 transition-opacity duration-500" />
-                                </div>
-
-                                <div className="px-2 pb-2 flex flex-col flex-1">
-                                    <span className="text-gray-500 text-xs font-semibold mb-2 uppercase tracking-[0.1em]">{project.category}</span>
-                                    <h3 className="text-xl font-bold text-white/90 group-hover/item:text-white transition-colors tracking-tight">
-                                        {project.title}
-                                    </h3>
-                                    <p className="text-sm text-gray-400 mt-2 line-clamp-2 leading-relaxed font-light">
-                                        {project.description}
-                                    </p>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
-                </motion.div>
-            </div>
-
-            {/* Application Modal */}
-            <AnimatePresence>
-                {selectedProject && (
-                    <motion.div
-                        initial={{ opacity: 0, backdropFilter: "blur(0px)" }}
-                        animate={{ opacity: 1, backdropFilter: "blur(12px)" }}
-                        exit={{ opacity: 0, backdropFilter: "blur(0px)" }}
-                        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                        className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 overflow-y-auto"
-                        onClick={() => setSelectedProject(null)}
-                    >
-                        <motion.div
-                            initial={{ scale: 0.95, opacity: 0, y: 10, filter: "blur(10px)" }}
-                            animate={{ scale: 1, opacity: 1, y: 0, filter: "blur(0px)" }}
-                            exit={{ scale: 0.95, opacity: 0, y: 10, filter: "blur(10px)" }}
-                            transition={{ type: "spring", stiffness: 300, damping: 30, mass: 0.8 }}
-                            className="bg-[#0a0a0a] w-full max-w-3xl rounded-[2rem] overflow-hidden border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8),inset_0_1px_1px_rgba(255,255,255,0.05)] my-8 flex flex-col relative"
-                            onClick={(e) => e.stopPropagation()}
-                        >
-                            <button
-                                onClick={() => setSelectedProject(null)}
-                                className="absolute top-4 right-4 p-2 bg-black/40 backdrop-blur-xl border border-white/10 rounded-full text-gray-400 hover:text-white hover:bg-white/10 hover:scale-110 transition-all z-[110]"
-                            >
-                                <X size={20} />
-                            </button>
-
-                            <div className="relative w-full aspect-[21/9] border-b border-white/5 bg-[#050505]">
-                                <img
-                                    src={selectedProject.image}
-                                    alt={selectedProject.title}
-                                    className="w-full h-full object-cover opacity-80"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent"></div>
-                            </div>
-
-                            <div className="p-8 md:p-12 flex flex-col flex-1">
-                                <h3 className="text-3xl font-black mb-4 tracking-tight">{selectedProject.title}</h3>
-                                <div className="flex gap-3 items-center mb-8">
-                                    <div className="px-3 py-1 bg-white/[0.03] border border-white/[0.05] rounded-full text-xs font-semibold text-gray-400 tracking-wide uppercase">
-                                        {selectedProject.category}
-                                    </div>
-                                </div>
-
-                                <p className="text-gray-400 leading-relaxed text-base md:text-lg mb-12 font-light">
-                                    {selectedProject.description}
-                                </p>
-
-                                <div className="flex flex-wrap gap-2 mb-12">
-                                    {selectedProject.stack.map(tech => (
-                                        <span key={tech} className="px-4 py-2 bg-white/[0.02] border border-white/[0.05] shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)] rounded-full text-sm font-medium text-gray-300">
-                                            {tech}
-                                        </span>
-                                    ))}
-                                </div>
-
-                                <div className="flex flex-col sm:flex-row gap-4 mt-auto border-t border-white/5 pt-8">
-                                    {selectedProject.LiveDemo === '#' ? (
-                                        <button disabled className="flex-1 py-4 bg-white/[0.02] border border-white/[0.05] text-gray-600 font-bold rounded-2xl flex items-center justify-center gap-2 cursor-not-allowed">
-                                            Not Live <ExternalLink size={18} />
-                                        </button>
-                                    ) : (
-                                        <a href={selectedProject.LiveDemo} target="_blank" rel="noopener noreferrer" className="flex-1 py-4 bg-white text-black font-bold rounded-2xl flex items-center justify-center gap-2 hover:bg-gray-200 hover:scale-[1.02] transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)]">
-                                            Live Demo <ExternalLink size={18} />
-                                        </a>
-                                    )}
-                                    <a href={selectedProject.SourceCode} target="_blank" rel="noopener noreferrer" className="flex-1 py-4 bg-white/[0.03] border border-white/10 text-white font-bold rounded-2xl flex items-center justify-center gap-2 hover:bg-white/10 active:scale-95 transition-all">
-                                        Source Code <Github size={18} />
-                                    </a>
-                                </div>
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </section>
-    );
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.2,
+    },
+  },
 };
 
-export default Projects;
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: [0.22, 1, 0.36, 1],
+    },
+  },
+};
+
+const ProjectCard = ({ project, onSelect }) => {
+  return (
+    <motion.div
+      variants={itemVariants}
+      whileHover={{ y: -8, scale: 1.02 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      onClick={() => onSelect(project)}
+      className="group relative cursor-pointer bg-[#111111] border border-white/5 rounded-xl overflow-hidden hover:border-red-500/30 transition-all duration-300 shadow-2xl shadow-black/50"
+    >
+      {/* Image Container */}
+      <div className="relative aspect-[16/10] overflow-hidden grayscale-[0.2] group-hover:grayscale-0 transition-all duration-500">
+        <motion.img
+          src={project.image}
+          alt={project.title}
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+          <span className="text-white text-[10px] uppercase font-bold tracking-[0.2em] flex items-center gap-2">
+            View Details <ExternalLink size={12} className="text-red-500" />
+          </span>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="p-6">
+        <div className="flex flex-wrap gap-2 mb-4">
+          {project.tags.slice(0, 2).map((tag) => (
+            <span key={tag} className="text-[9px] uppercase tracking-[0.15em] font-bold text-neutral-500 border border-white/5 px-2 py-1 rounded-sm">
+              {tag}
+            </span>
+          ))}
+        </div>
+        <h3 className="text-lg font-bold text-white mb-2 tracking-tight group-hover:text-red-500 transition-colors">
+          {project.title}
+        </h3>
+        <p className="text-neutral-400 text-xs leading-relaxed line-clamp-2 tracking-tight">
+          {project.description}
+        </p>
+      </div>
+    </motion.div>
+  );
+};
+
+export default function Projects() {
+  const [selected, setSelected] = useState(null);
+
+  return (
+    <section id="projects" className="py-24 bg-[#050505] relative overflow-hidden tracking-tight">
+      <div className="container mx-auto px-6 md:px-16 max-w-6xl relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="mb-16"
+        >
+          <div className="flex items-center gap-4 mb-2">
+            <div className="h-[2px] w-8 bg-red-600 rounded-full" />
+            <span className="text-[10px] uppercase font-bold tracking-[0.3em] text-red-500">
+              Work
+            </span>
+          </div>
+          <h2 className="text-4xl md:text-5xl font-black tracking-tighter text-white uppercase italic">
+            Featured <span className="text-neutral-600">Projects</span>
+          </h2>
+        </motion.div>
+
+        <motion.div
+           variants={containerVariants}
+           initial="hidden"
+           whileInView="visible"
+           viewport={{ once: true }}
+           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          {projects.map((project) => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              onSelect={setSelected}
+            />
+          ))}
+        </motion.div>
+      </div>
+
+      {/* MODAL */}
+      <AnimatePresence>
+        {selected && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6"
+          >
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelected(null)}
+              className="absolute inset-0 bg-black/95 backdrop-blur-sm"
+            />
+            
+            <motion.div
+              layoutId={`project-${selected.id}`}
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              className="relative bg-[#0A0A0A] border border-white/5 rounded-2xl overflow-hidden max-w-4xl w-full max-h-[90vh] flex flex-col md:flex-row shadow-2xl tracking-tight"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setSelected(null)}
+                className="absolute top-4 right-4 z-10 p-2 bg-black/50 hover:bg-red-500/20 text-white hover:text-red-500 rounded-full transition-all"
+                aria-label="Close modal"
+              >
+                <X size={18} />
+              </button>
+
+              {/* Modal Image */}
+              <div className="w-full md:w-1/2 h-64 md:h-auto overflow-hidden border-b md:border-b-0 md:border-r border-white/5">
+                <img
+                  src={selected.image}
+                  alt={selected.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              {/* Modal Content */}
+              <div className="w-full md:w-1/2 p-8 md:p-12 flex flex-col justify-center overflow-y-auto">
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {selected.tags.map((tag) => (
+                    <span key={tag} className="text-[9px] uppercase tracking-widest font-black text-red-500 bg-red-500/5 border border-red-500/20 px-3 py-1 rounded-sm">
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+                
+                <h2 className="text-3xl md:text-4xl font-black text-white mb-4 uppercase italic tracking-tighter">
+                  {selected.title}
+                </h2>
+                
+                <p className="text-neutral-400 text-sm leading-relaxed mb-10 tracking-tight">
+                  {selected.longDescription || selected.description}
+                </p>
+
+                <div className="flex flex-wrap gap-4 mt-auto">
+                  <a
+                    href={selected.live}
+                    className="flex items-center gap-3 px-8 py-3 bg-red-600 text-white text-[10px] uppercase font-bold tracking-[0.2em] rounded-sm hover:bg-red-700 transition-all shadow-lg shadow-red-600/20"
+                  >
+                    Launch <ExternalLink size={14} />
+                  </a>
+                  <a
+                    href={selected.github}
+                    className="flex items-center gap-3 px-8 py-3 bg-white/5 border border-white/10 text-white text-[10px] uppercase font-bold tracking-[0.2em] rounded-sm hover:bg-white/10 transition-all"
+                  >
+                    Source <Github size={14} />
+                  </a>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </section>
+  );
+}

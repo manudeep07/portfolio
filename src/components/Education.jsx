@@ -30,147 +30,174 @@ const Education = () => {
     <section
       id="education"
       key={refreshKey}
-      className="min-h-screen py-24 scroll-mt-20 flex items-center justify-center bg-gradient-to-b from-black to-[#0f172a] text-white overflow-hidden relative"
+      className="py-24 bg-section text-white relative overflow-hidden flex items-center justify-center"
     >
-      {/* Deep Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-purple-500/10 blur-[150px] rounded-full pointer-events-none" />
+      {/* Deep Glow Background */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-red-600/5 blur-[150px] rounded-full pointer-events-none" />
 
-      <div className="max-w-6xl w-full mx-auto px-6 relative z-10">
+      <div className="max-w-6xl w-full mx-auto px-6 md:px-16 relative z-10 flex flex-col">
 
         {/* Heading */}
         <motion.div 
-          initial={{ opacity: 0, y: -30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-center mb-24 md:mb-32"
+          transition={{ duration: 0.8 }}
+          className="mb-20"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight">Education</h2>
-          <p className="text-gray-400">
-            My academic journey
-          </p>
+          <div className="flex items-center gap-4 mb-4">
+            <div className="h-[2px] w-8 bg-red-600 rounded-full" />
+            <span className="text-[10px] uppercase font-bold tracking-[0.3em] text-red-500">
+              Academic Journey
+            </span>
+          </div>
+          <h2 className="text-4xl md:text-5xl lg:text-7xl font-black text-white uppercase italic tracking-tighter">
+            Education <span className="text-neutral-700">& Bio</span>
+          </h2>
         </motion.div>
 
         {/* Timeline Desktop (Horizontal Alternating) */}
-        <div className="hidden md:block relative w-full h-[300px]">
-          {/* Base Line */}
-          <div className="absolute top-1/2 left-0 w-full h-[2px] bg-white/10 -translate-y-1/2" />
+        <div className="hidden md:flex relative w-full h-[350px] items-center justify-between mt-8">
           
-          {/* Animated Progress */}
+          {/* Base Horizontal Line */}
+          <div className="absolute top-1/2 left-0 w-full h-[2px] bg-white/5 -translate-y-1/2" />
+          
+          {/* Animated Horizontal Progress */}
           <motion.div
             initial={{ width: 0 }}
             whileInView={{ width: "100%" }}
             viewport={{ once: true }}
-            transition={{ duration: 1.5, ease: "easeInOut" }}
-            className="absolute top-1/2 left-0 h-[2px] bg-gradient-to-r from-purple-500 to-blue-500 -translate-y-1/2 shadow-[0_0_15px_rgba(168,85,247,0.6)]"
+            transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute top-1/2 left-0 h-[2px] bg-red-600 -translate-y-1/2 shadow-[0_0_15px_rgba(239,68,68,0.5)] origin-left"
           />
 
-          <div className="relative flex items-center justify-between h-full">
-            {education.map((item, index) => (
-              <div key={index} className="relative flex flex-col items-center justify-center w-1/3 group">
+          {education.map((item, index) => {
+            const isDown = index % 2 === 0;
 
-                {/* Node */}
+            return (
+              <div key={index} className="relative h-full flex flex-col items-center justify-center w-1/3 group">
+                
+                {/* Node (Dot) */}
                 <motion.div
                   initial={{ scale: 0 }}
                   whileInView={{ scale: 1 }}
                   viewport={{ once: true }}
-                  transition={{ delay: 0.5 + index * 0.2, type: "spring", stiffness: 200, damping: 15 }}
-                  className={`
-                    absolute top-1/2 -translate-y-1/2 z-20 w-6 h-6 rounded-full border-4 border-[#0f172a] 
-                    ${item.current ? "bg-purple-400 scale-125 shadow-[0_0_20px_rgba(168,85,247,0.8)]" : "bg-gray-500"}
-                    transition-colors duration-300 group-hover:bg-white cursor-pointer
-                  `}
-                />
-
-                {/* Alternating Card */}
-                <motion.div
-                  initial={{ opacity: 0, y: index % 2 === 0 ? 30 : -30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.2 + 0.2, duration: 0.5 }}
-                  className={`
-                    absolute ${index % 2 === 0 ? "top-[60%]" : "bottom-[60%]"} 
-                    w-[260px] bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-[2rem] p-6 text-center 
-                    shadow-[0_15px_40px_rgba(0,0,0,0.5),inset_0_1px_1px_rgba(255,255,255,0.1)] 
-                    hover:bg-white/[0.08] hover:border-white/30 hover:-translate-y-2 hover:shadow-[0_20px_60px_rgba(100,50,255,0.2)] 
-                    transition-all duration-300
+                  transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.4 + index * 0.1 }}
+                  className={`w-4 h-4 rounded-sm border-[2px] border-section z-20 relative cursor-pointer
+                    ${item.current 
+                      ? "bg-red-500 scale-[1.3] shadow-[0_0_20px_rgba(239,68,68,0.8)]" 
+                      : "bg-neutral-800"
+                    }
+                    group-hover:bg-white group-hover:shadow-[0_0_20px_rgba(255,255,255,0.8)] transition-all duration-300
                   `}
                 >
-                  {/* Current Badge for Desktop */}
                   {item.current && (
-                    <span className={`absolute ${index % 2 === 0 ? "-top-3" : "-bottom-3"} left-1/2 -translate-x-1/2 inline-block text-[10px] font-bold tracking-widest uppercase text-white bg-gradient-to-r from-purple-500 to-blue-500 px-3 py-1 rounded-full shadow-lg border border-white/20`}>
-                      Current
-                    </span>
+                    <>
+                      <div className="absolute inset-0 rounded-sm animate-ping bg-red-500/40" />
+                      <div className={`absolute ${isDown ? "bottom-8" : "top-8"} left-1/2 -translate-x-1/2`}>
+                        <span className="text-[9px] font-black tracking-widest uppercase text-red-500 italic whitespace-nowrap">
+                          Active
+                        </span>
+                      </div>
+                    </>
                   )}
+                </motion.div>
 
-                  <h3 className="font-bold text-lg leading-snug mb-2">{item.title}</h3>
-                  <p className="text-gray-400 text-sm font-medium">{item.place}</p>
-                  <p className="text-gray-500 text-xs mt-2 font-mono">{item.year}</p>
+                {/* Vertical Connector Line */}
+                <motion.div
+                  initial={{ height: 0 }}
+                  whileInView={{ height: 40 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: 0.6 + index * 0.1, ease: "easeOut" }}
+                  className={`absolute w-[2px] bg-red-600/30 ${
+                    isDown 
+                      ? "top-[calc(50%+8px)] origin-top" 
+                      : "bottom-[calc(50%+8px)] origin-bottom"
+                  } z-10 transition-all duration-300 group-hover:bg-red-600 group-hover:h-[48px]`}
+                />
 
-                  <div className="mt-4 inline-block px-4 py-1.5 bg-black/40 border border-white/5 rounded-full text-sm font-mono text-gray-300 shadow-inner">
-                    {item.score}
+                {/* Card */}
+                <motion.div
+                  initial={{ opacity: 0, y: isDown ? 20 : -20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.7 + index * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                  className={`absolute ${
+                    isDown ? "top-[calc(50%+58px)]" : "bottom-[calc(50%+58px)]"
+                  } w-[280px] z-30 bg-card border border-white/5 rounded-xl p-6 text-left shadow-2xl shadow-black/50 hover:border-red-500/30 hover:scale-[1.02] transition-all duration-300`}
+                >
+                  <div className="flex flex-col gap-2">
+                    <h3 className="font-black text-sm uppercase italic tracking-tighter text-white">{item.title}</h3>
+                    <p className="text-red-500 text-[10px] font-bold uppercase tracking-widest">{item.place}</p>
+                    
+                    <div className="flex justify-between items-center mt-4 pt-4 border-t border-white/5">
+                      <p className="text-neutral-500 text-[10px] font-bold uppercase tracking-widest">{item.year}</p>
+                      <div className="px-3 py-1 bg-red-500/5 border border-red-500/10 rounded-sm text-[10px] font-black text-red-500 uppercase tracking-widest">
+                        {item.score}
+                      </div>
+                    </div>
                   </div>
                 </motion.div>
                 
               </div>
-            ))}
-          </div>
+            );
+          })}
         </div>
 
-        {/* Timeline Mobile (Vertical) */}
-        <div className="md:hidden relative w-full pl-6">
-          {/* Vertical Line Base */}
-          <div className="absolute top-0 left-0 w-[2px] h-full bg-white/10" />
+        {/* Timeline Mobile (Vertical Stacked) */}
+        <div className="md:hidden relative w-full pt-10">
           
-          {/* Vertical Line Progress */}
+          {/* Base Vertical Line */}
+          <div className="absolute top-0 left-[20px] w-[2px] h-full bg-white/5" />
+          
+          {/* Animated Vertical Progress */}
           <motion.div
             initial={{ height: 0 }}
             whileInView={{ height: "100%" }}
             viewport={{ once: true }}
             transition={{ duration: 1.5, ease: "easeInOut" }}
-            className="absolute top-0 left-0 w-[2px] bg-gradient-to-b from-purple-500 to-blue-500 shadow-[0_0_15px_rgba(168,85,247,0.6)]"
+            className="absolute top-0 left-[20px] w-[2px] bg-red-600 shadow-[0_0_15px_rgba(239,68,68,0.5)] origin-top"
           />
 
-          <div className="flex flex-col gap-12">
+          <div className="flex flex-col gap-12 pl-[48px] pr-2 pb-6">
             {education.map((item, index) => (
               <div key={index} className="relative group">
                 
-                {/* Node */}
+                {/* Node (Dot) */}
                 <motion.div
                   initial={{ scale: 0 }}
                   whileInView={{ scale: 1 }}
                   viewport={{ once: true }}
-                  transition={{ delay: 0.3 + index * 0.2, type: "spring", stiffness: 200 }}
-                  className={`
-                    absolute top-6 -left-[27px] z-20 w-5 h-5 rounded-full border-[3px] border-[#0f172a]
-                    ${item.current ? "bg-purple-400 scale-125 shadow-[0_0_10px_rgba(168,85,247,0.8)]" : "bg-gray-500"}
+                  transition={{ delay: 0.3 + index * 0.1, type: "spring", stiffness: 200 }}
+                  className={`absolute top-[24px] -left-[35px] z-20 w-4 h-4 rounded-sm border-[2px] border-section
+                    ${item.current 
+                      ? "bg-red-500 scale-[1.3] shadow-[0_0_15px_rgba(239,68,68,0.8)]" 
+                      : "bg-neutral-800"
+                    }
                   `}
-                />
+                >
+                  {item.current && (
+                    <div className="absolute inset-0 rounded-sm animate-ping bg-red-500/50" />
+                  )}
+                </motion.div>
 
                 {/* Card */}
                 <motion.div
                   initial={{ opacity: 0, x: 20 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: index * 0.2, duration: 0.5 }}
-                  className="w-full bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-lg relative"
+                  transition={{ delay: 0.5 + index * 0.1, duration: 0.6 }}
+                  className="w-full bg-card border border-white/5 rounded-xl p-6 shadow-2xl relative"
                 >
-                  <h3 className="font-bold text-lg leading-snug mb-1">{item.title}</h3>
-                  <p className="text-gray-400 text-sm font-medium">{item.place}</p>
-                  <p className="text-gray-500 text-xs mt-2 font-mono">{item.year}</p>
-
-                  <div className="mt-4 inline-block px-4 py-1.5 bg-black/40 border border-white/5 rounded-full text-sm font-mono text-gray-300">
-                    {item.score}
-                  </div>
-
-                  {/* Current Badge for Mobile */}
-                  {item.current && (
-                    <div className="mt-5">
-                        <span className="inline-block text-[10px] font-bold tracking-widest uppercase text-white bg-gradient-to-r from-purple-500 to-blue-500 px-3 py-1 rounded-full border border-white/20">
-                        Current
-                        </span>
+                  <h3 className="font-black text-sm uppercase italic tracking-tighter text-white mb-1">{item.title}</h3>
+                  <p className="text-red-500 text-[10px] font-bold uppercase tracking-widest mb-4">{item.place}</p>
+                  
+                  <div className="flex flex-wrap gap-4 items-center justify-between mt-4 pt-4 border-t border-white/5">
+                    <p className="text-neutral-500 text-[10px] font-bold uppercase tracking-widest">{item.year}</p>
+                    <div className="px-3 py-1 bg-red-500/5 border border-red-500/10 rounded-sm text-[10px] font-black text-red-500">
+                      {item.score}
                     </div>
-                  )}
+                  </div>
                 </motion.div>
                 
               </div>
@@ -180,7 +207,9 @@ const Education = () => {
 
       </div>
     </section>
+
   );
 };
 
 export default Education;
+

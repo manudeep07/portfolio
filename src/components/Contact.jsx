@@ -1,9 +1,56 @@
-import { useRef, useState, useMemo } from 'react';
+import { useRef, useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { blurFadeIn } from '../animations/variants';
-import { Send, CheckCircle, AlertCircle, XCircle } from 'lucide-react';
+import { blurFadeIn, staggerContainer } from '../animations/variants';
+import { Send, CheckCircle, MapPin, Clock, Github, Linkedin, Mail } from 'lucide-react';
 import useNavTrigger from '../hooks/useNavTrigger';
 import Magnetic from './Magnetic';
+
+// Futuristic Particles Background Component
+const ParticlesBackground = () => {
+    // Generate static array of particles for performance to avoid re-renders
+    const particles = useMemo(() => {
+        return Array.from({ length: 30 }).map((_, i) => ({
+            id: i,
+            size: Math.random() * 2 + 1,
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+            duration: Math.random() * 20 + 10,
+            delay: Math.random() * 5
+        }));
+    }, []);
+
+    return (
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {/* Soft animated red glows */}
+            <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-red-600/5 rounded-full blur-[120px] mix-blend-screen animate-pulse" />
+            
+            {/* Floating particles */}
+            {particles.map(p => (
+                <motion.div
+                    key={p.id}
+                    initial={{ opacity: 0, y: 0 }}
+                    animate={{ 
+                        opacity: [0, 0.2, 0], 
+                        y: [-20, -100] 
+                    }}
+                    transition={{
+                        duration: p.duration,
+                        repeat: Infinity,
+                        delay: p.delay,
+                        ease: "linear"
+                    }}
+                    className="absolute rounded-sm bg-red-500/20 shadow-[0_0_4px_rgba(239,68,68,0.3)]"
+                    style={{
+                        width: p.size,
+                        height: p.size,
+                        left: p.left,
+                        top: p.top
+                    }}
+                />
+            ))}
+        </div>
+    );
+};
 
 const Contact = () => {
     const form = useRef();
@@ -23,14 +70,17 @@ const Contact = () => {
     
     const [status, setStatus] = useState('idle'); // idle, loading, success, error
 
+    // Terminal sequence state for success message
+    const [terminalLines, setTerminalLines] = useState([]);
+    
     // Real-time validation logic
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     
     const errors = useMemo(() => {
         return {
-            name: formState.name.trim().length < 2 ? "Name must be at least 2 characters." : null,
-            email: !emailRegex.test(formState.email) ? "Please enter a valid email address." : null,
-            message: formState.message.trim().length < 10 ? "Message must be at least 10 characters long." : null,
+            name: formState.name.trim().length < 2 ? "Name required" : null,
+            email: !emailRegex.test(formState.email) ? "Invalid email" : null,
+            message: formState.message.trim().length < 10 ? "Message too short" : null,
         };
     }, [formState]);
     
@@ -60,10 +110,9 @@ const Contact = () => {
         
         setStatus('loading');
 
-        const subject = encodeURIComponent(`Message from ${formState.name} (${formState.email})`);
+        const subject = encodeURIComponent(`Message from ${formState.name}`);
         const body = encodeURIComponent(formState.message);
         
-        // Simulate network request for premium feedback UX
         setTimeout(() => {
             window.location.href = `mailto:manudeep1000@gmail.com?subject=${subject}&body=${body}`;
             
@@ -71,38 +120,92 @@ const Contact = () => {
             setFormState({ name: '', email: '', message: '' });
             setTouched({ name: false, email: false, message: false });
             
-            setTimeout(() => setStatus('idle'), 4000);
+            // Start terminal animation
+            setTerminalLines([]); 
+            setTimeout(() => setTerminalLines(prev => [...prev, 'Establishing secure link...']), 100);
+            setTimeout(() => setTerminalLines(prev => [...prev, 'Encrypting telemetry...']), 800);
+            setTimeout(() => setTerminalLines(prev => [...prev, 'Link Stabilized. Message Sent.']), 1800);
+
+            setTimeout(() => {
+                setStatus('idle');
+                setTerminalLines([]);
+            }, 6000);
+
         }, 800);
     };
 
     return (
-        <section id="contact" className="py-24 scroll-mt-20 bg-black text-white relative border-t border-white/5">
-            <div className="container mx-auto px-6 max-w-6xl relative z-10">
+        <section id="contact" className="py-24 bg-background text-white relative border-t border-white/5 overflow-hidden">
+            <ParticlesBackground />
+            
+            <div className="container mx-auto px-6 md:px-16 max-w-6xl relative z-10">
                 <motion.div
                     key={refreshKey}
                     initial="hidden"
                     whileInView="visible"
-                    viewport={{ amount: 0.2, once: true }}
-                    className="flex flex-col items-center"
+                    viewport={{ amount: 0.1, once: true }}
+                    variants={staggerContainer}
+                    className="flex flex-col lg:flex-row gap-16 lg:gap-24 items-center"
                 >
-                    <motion.div variants={blurFadeIn} className="text-center mb-16">
-                        <motion.h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
-                            Let's Connect
-                        </motion.h2>
-                        <motion.p className="text-gray-400 text-lg max-w-2xl mx-auto font-light">
-                            Open to deploying powerful projects. Send over an abstract and let's structure a build.
-                        </motion.p>
-                    </motion.div>
+                    {/* Left Panel: Info & Abstract */}
+                    <div className="lg:w-1/2 flex flex-col justify-center">
+                        <motion.div variants={blurFadeIn} className="flex items-center gap-4 mb-8">
+                            <div className="h-[2px] w-8 bg-red-600 rounded-full" />
+                            <span className="text-[10px] uppercase font-bold tracking-[0.3em] text-red-500">
+                                Contact Channel
+                            </span>
+                        </motion.div>
 
+                        <motion.h2 variants={blurFadeIn} className="text-4xl md:text-5xl lg:text-7xl font-black uppercase italic tracking-tighter mb-8 leading-[1]">
+                            Let's build <br /> something <span className="text-neutral-700">Impactful.</span>
+                        </motion.h2>
+                        
+                        <motion.p variants={blurFadeIn} className="text-neutral-400 text-lg mb-10 leading-relaxed tracking-tight max-w-md">
+                            Open for high-performance collaborations. Initiate a secure link to discuss your project abstract.
+                        </motion.p>
+                        
+                        {/* <motion.div variants={blurFadeIn} className="space-y-6 mb-12">
+                            <div className="flex items-center gap-4 text-neutral-300">
+                                <MapPin size={18} className="text-red-500" />
+                                <span className="text-xs font-bold uppercase tracking-widest">Earth, Sol System</span>
+                            </div>
+                            <div className="flex items-center gap-4 text-neutral-300">
+                                <Clock size={18} className="text-red-500" />
+                                <span className="text-xs font-bold uppercase tracking-widest">Response T-24 Hours</span>
+                            </div>
+                        </motion.div> */}
+                        
+                        <motion.div variants={blurFadeIn} className="flex items-center gap-4">
+                            {[
+                                { icon: Github, href: "https://github.com/manudeep1000", label: "GitHub" },
+                                { icon: Linkedin, href: "https://linkedin.com/in/manudeep1000", label: "LinkedIn" },
+                                { icon: Mail, href: "mailto:manudeep1000@gmail.com", label: "Email" }
+                            ].map((social, idx) => (
+                                <Magnetic strength={0.2} key={idx}>
+                                    <a 
+                                        href={social.href}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        aria-label={social.label}
+                                        className="group w-12 h-12 rounded-sm bg-card border border-white/5 flex items-center justify-center text-neutral-500 transition-all duration-300 hover:text-red-500 hover:border-red-500/50"
+                                    >
+                                        <social.icon size={20} className="transition-transform group-hover:scale-110" />
+                                    </a>
+                                </Magnetic>
+                            ))}
+                        </motion.div>
+                    </div>
+
+                    {/* Right Panel: F1 Form */}
                     <motion.div 
                         variants={blurFadeIn}
-                        className="w-full max-w-2xl"
+                        className="lg:w-1/2 w-full relative"
                     >
-                        <div className="bg-[#050505] p-8 md:p-12 rounded-3xl border border-white/[0.05] shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)]">
-                            <form onSubmit={handleSubmit} ref={form} className="space-y-6" noValidate>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div className="relative">
-                                        <label htmlFor="name" className="block text-xs font-semibold tracking-wider uppercase text-gray-500 mb-2 ml-1">Name</label>
+                        <div className="bg-card p-8 md:p-12 rounded-xl border border-white/5 shadow-2xl shadow-black relative overflow-hidden group">
+                            <form onSubmit={handleSubmit} ref={form} className="space-y-8 relative z-10" noValidate>
+                                <div className="space-y-6">
+                                    <div className="relative group/input">
+                                        <label htmlFor="name" className="block text-[10px] font-black tracking-widest uppercase text-neutral-500 mb-2 italic">01 // Name</label>
                                         <input
                                             type="text"
                                             id="name"
@@ -111,18 +214,18 @@ const Contact = () => {
                                             onChange={handleChange}
                                             onBlur={handleBlur}
                                             className={`
-                                                w-full bg-white/[0.02] border rounded-2xl px-5 py-4 text-white placeholder-gray-600 transition-all duration-300
-                                                focus:outline-none focus:ring-1 focus:bg-white/[0.04] shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)]
+                                                w-full bg-background border rounded-sm px-5 py-4 text-white text-sm font-bold tracking-tight transition-all duration-300
+                                                focus:outline-none focus:bg-neutral-900
                                                 ${touched.name && errors.name 
-                                                    ? 'border-red-500/30 focus:border-red-500 focus:ring-red-500/30' 
-                                                    : 'border-white/5 focus:border-white/30 focus:ring-white/10 hover:border-white/10'}
+                                                    ? 'border-red-500/50' 
+                                                    : 'border-white/5 focus:border-red-500/50'}
                                             `}
-                                            placeholder="Jane Doe"
+                                            placeholder="NARASINGU MANUDEEP"
                                         />
                                     </div>
                                     
-                                    <div className="relative">
-                                        <label htmlFor="email" className="block text-xs font-semibold tracking-wider uppercase text-gray-500 mb-2 ml-1">Email</label>
+                                    <div className="relative group/input">
+                                        <label htmlFor="email" className="block text-[10px] font-black tracking-widest uppercase text-neutral-500 mb-2 italic">02 // Email</label>
                                         <input
                                             type="email"
                                             id="email"
@@ -131,57 +234,61 @@ const Contact = () => {
                                             onChange={handleChange}
                                             onBlur={handleBlur}
                                             className={`
-                                                w-full bg-white/[0.02] border rounded-2xl px-5 py-4 text-white placeholder-gray-600 transition-all duration-300
-                                                focus:outline-none focus:ring-1 focus:bg-white/[0.04] shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)]
+                                                w-full bg-background border rounded-sm px-5 py-4 text-white text-sm font-bold tracking-tight transition-all duration-300
+                                                focus:outline-none focus:bg-neutral-900
                                                 ${touched.email && errors.email 
-                                                    ? 'border-red-500/30 focus:border-red-500 focus:ring-red-500/30' 
-                                                    : 'border-white/5 focus:border-white/30 focus:ring-white/10 hover:border-white/10'}
+                                                    ? 'border-red-500/50' 
+                                                    : 'border-white/5 focus:border-red-500/50'}
                                             `}
-                                            placeholder="hello@example.com"
+                                            placeholder="HELLO@PRECISION.COM"
                                         />
                                     </div>
-                                </div>
 
-                                <div className="relative">
-                                    <label htmlFor="message" className="block text-xs font-semibold tracking-wider uppercase text-gray-500 mb-2 ml-1">Message</label>
-                                    <textarea
-                                        id="message"
-                                        name="message"
-                                        rows="5"
-                                        value={formState.message}
-                                        onChange={handleChange}
-                                        onBlur={handleBlur}
-                                        className={`
-                                            w-full bg-white/[0.02] border rounded-2xl px-5 py-4 text-white resize-none placeholder-gray-600 transition-all duration-300
-                                            focus:outline-none focus:ring-1 focus:bg-white/[0.04] shadow-[inset_0_2px_4px_rgba(0,0,0,0.5)]
-                                            ${touched.message && errors.message 
-                                                ? 'border-red-500/30 focus:border-red-500 focus:ring-red-500/30' 
-                                                : 'border-white/5 focus:border-white/30 focus:ring-white/10 hover:border-white/10'}
-                                        `}
-                                        placeholder="How can I help you?"
-                                    ></textarea>
+                                    <div className="relative group/input">
+                                        <label htmlFor="message" className="block text-[10px] font-black tracking-widest uppercase text-neutral-500 mb-2 italic">03 // Abstract</label>
+                                        <textarea
+                                            id="message"
+                                            name="message"
+                                            rows="4"
+                                            value={formState.message}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            className={`
+                                                w-full bg-background border rounded-sm px-5 py-4 text-white text-sm font-bold tracking-tight resize-none transition-all duration-300
+                                                focus:outline-none focus:bg-neutral-900
+                                                ${touched.message && errors.message 
+                                                    ? 'border-red-500/50' 
+                                                    : 'border-white/5 focus:border-red-500/50'}
+                                            `}
+                                            placeholder="INITIATE DATA TRANSMISSION..."
+                                        ></textarea>
+                                    </div>
                                 </div>
 
                                 <Magnetic strength={0.1}>
                                     <button
                                         type="submit"
-                                        disabled={!isFormValid || status === 'loading'}
+                                        disabled={!isFormValid || status === 'loading' || status === 'success'}
                                         className={`
-                                            w-full py-5 font-bold text-[15px] rounded-2xl flex items-center justify-center gap-3 transition-all duration-500 active:scale-[0.98]
-                                            ${isFormValid 
-                                                ? 'bg-white text-black hover:bg-gray-200 shadow-[0_4px_20px_rgba(255,255,255,0.1)]' 
-                                                : 'bg-white/[0.03] text-gray-600 cursor-not-allowed border border-white/[0.05]'}
+                                            group w-full px-8 py-5 font-black text-xs uppercase italic tracking-[0.2em] rounded-sm flex items-center justify-center gap-4 transition-all duration-500 active:scale-95
+                                            ${isFormValid && status !== 'success'
+                                                ? 'bg-red-600 text-white hover:bg-white hover:text-black shadow-lg shadow-red-600/20' 
+                                                : 'bg-neutral-900 text-neutral-700 cursor-not-allowed border border-white/5'}
                                         `}
                                     >
                                         {status === 'loading' ? (
                                             <div className="flex items-center gap-3">
-                                                <div className="w-5 h-5 border-2 border-black/20 border-t-black rounded-full animate-spin" />
-                                                Routing...
+                                                <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
+                                                Processing
+                                            </div>
+                                        ) : status === 'success' ? (
+                                            <div className="flex items-center gap-2">
+                                                <CheckCircle size={16} />
+                                                Sent
                                             </div>
                                         ) : (
                                             <>
-                                                Send Transmission
-                                                <Send size={18} className="ml-1" />
+                                                Launch Message <Send size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                                             </>
                                         )}
                                     </button>
@@ -191,14 +298,21 @@ const Contact = () => {
                             <AnimatePresence>
                                 {status === 'success' && (
                                     <motion.div
-                                        initial={{ opacity: 0, y: 15, scale: 0.95 }}
-                                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                                        exit={{ opacity: 0, scale: 0.95 }}
-                                        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                                        className="mt-6 p-5 bg-white/[0.02] border border-white/10 rounded-2xl flex items-center justify-center gap-3 text-white font-medium"
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: 10 }}
+                                        className="mt-8 bg-background border border-red-500/20 rounded-lg p-6 font-mono text-[10px] md:text-xs"
                                     >
-                                        <CheckCircle size={20} className="text-white" />
-                                        <span>Ready! Client launched.</span>
+                                        {terminalLines.map((line, idx) => (
+                                            <motion.div
+                                                key={idx}
+                                                initial={{ opacity: 0, x: -5 }}
+                                                animate={{ opacity: 1, x: 0 }}
+                                                className={`flex items-center gap-3 mb-2 last:mb-0 ${idx === terminalLines.length - 1 ? 'text-red-500 font-black' : 'text-neutral-500'}`}
+                                            >
+                                                <span className="text-red-500/30 font-bold">{'>'}</span> {line}
+                                            </motion.div>
+                                        ))}
                                     </motion.div>
                                 )}
                             </AnimatePresence>
@@ -206,6 +320,22 @@ const Contact = () => {
                     </motion.div>
                 </motion.div>
             </div>
+
+            
+            <style>{`
+                @keyframes shimmer {
+                    100% {
+                        transform: translateX(100%);
+                    }
+                }
+                @keyframes shine {
+                    0% { transform: translateX(-200%); }
+                    100% { transform: translateX(200%); }
+                }
+                .animate-shine {
+                    animation: shine 2s ease-in-out infinite;
+                }
+            `}</style>
         </section>
     );
 };

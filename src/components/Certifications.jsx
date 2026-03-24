@@ -1,53 +1,56 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Award, ExternalLink } from "lucide-react";
 import useNavTrigger from "../hooks/useNavTrigger";
-
+import software from "../assets/software.png"
+import nptel from "../assets/nptel.png"
+import bits from "../assets/bitsandbytes.png"
+import master from "../assets/mastergenerativeai.png"
 const certificates = [
   {
     id: 1,
     title: "Master Generative AI & Tools",
     org: "Udemy",
     year: "2025",
-    link: "#",
+    link: "https://www.udemy.com/certificate/UC-b478df37-62ba-4fff-8d94-f4699465cdbe/",
     image:
-      "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&q=80&w=800&h=1000",
+      master,
     x: -180,
     y: -30,
     rotate: -12,
   },
   {
     id: 2,
-    title: "Computer Networking",
+    title: "Bits and Bytes of Computer Networking",
     org: "Coursera",
     year: "2024",
-    link: "#",
+    link: "https://www.coursera.org/account/accomplishments/verify/VO6M465PCJL1",
     image:
-      "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800&h=1000",
+      bits,
     x: -60,
     y: 20,
     rotate: -5,
   },
   {
     id: 3,
-    title: "Software Development",
+    title: "Software Development Processes and Methodologies",
     org: "Coursera",
     year: "2024",
-    link: "#",
+    link: "https://www.coursera.org/account/accomplishments/verify/DLGZ8QKAW4WS",
     image:
-      "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=800&h=1000",
+      software,
     x: 60,
     y: -10,
     rotate: 6,
   },
   {
     id: 4,
-    title: "Frontend Architecture",
-    org: "Meta",
+    title: "Social Networks",
+    org: "NPTEL",
     year: "2024",
-    link: "#",
+    link: "https://archive.nptel.ac.in/noc/Ecertificate/?q=NPTEL25CS65S14750003204445075",
     image:
-      "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80&w=800&h=1000",
+      nptel,
     x: 180,
     y: 30,
     rotate: 12,
@@ -57,37 +60,49 @@ const certificates = [
 const Certifications = () => {
   const refreshKey = useNavTrigger("certifications");
   const [hoveredCert, setHoveredCert] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   return (
     <section
       id="certifications"
       key={refreshKey}
-      className="min-h-screen py-24 flex items-center justify-center bg-gradient-to-b from-black to-[#0f172a] relative overflow-hidden"
+      className="py-24 flex items-center justify-center bg-section relative overflow-hidden"
     >
       {/* 🌌 Background Glow */}
-      <div className="absolute w-[800px] h-[800px] bg-purple-500/10 blur-[150px] rounded-full pointer-events-none" />
+      <div className="absolute w-[800px] h-[800px] bg-red-600/5 blur-[150px] rounded-full pointer-events-none" />
 
-      <div className="container mx-auto px-6 max-w-7xl relative z-10 flex flex-col items-center">
+      <div className="container mx-auto px-6 md:px-16 max-w-6xl relative z-10 flex flex-col">
 
         {/* Heading */}
         <motion.div
-          initial={{ opacity: 0, y: -30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          className="mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
-            Certifications
+          <div className="flex items-center gap-4 mb-4">
+            <div className="h-[2px] w-8 bg-red-600 rounded-full" />
+            <span className="text-[10px] uppercase font-bold tracking-[0.3em] text-red-500">
+              Certifications
+            </span>
+          </div>
+          <h2 className="text-4xl md:text-5xl lg:text-7xl font-black text-white uppercase italic tracking-tighter">
+            Verified <span className="text-neutral-700">Certificates</span>
           </h2>
-          <p className="text-gray-400">
-            Explore my verified achievements
-          </p>
         </motion.div>
 
-        <div className="flex flex-col lg:flex-row w-full items-center justify-center gap-16">
+        <div className="flex flex-col lg:flex-row w-full items-center justify-center gap-12 lg:gap-24">
 
           {/* LEFT: CARDS */}
-          <div className="relative w-full lg:w-1/2 h-[450px] flex items-center justify-center perspective-[1200px]">
+          <div className={`relative w-full lg:w-1/2 ${isMobile ? 'flex flex-col gap-6 items-center' : 'h-[450px] flex items-center justify-center perspective-[1200px]'}`}>
             {certificates.map((cert, index) => {
               const isFocused = hoveredCert?.id === cert.id;
               const isFaded = hoveredCert && !isFocused;
@@ -95,83 +110,76 @@ const Certifications = () => {
               return (
                 <motion.div
                   key={cert.id}
-                  // 1. Initial Deal & Settling Position (runs once)
-                  initial={{ opacity: 0, x: -250, y: 150, rotate: -40, scale: 0.8 }}
-                  whileInView={{ opacity: 1, x: cert.x, y: cert.y, rotate: cert.rotate, scale: 1 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{
-                    delay: index * 0.15,
-                    type: "spring",
-                    stiffness: 100,
-                    damping: 15,
-                    mass: 1,
+                  initial={{ opacity: 0, x: isMobile ? 0 : -100, y: isMobile ? 0 : 50, rotate: isMobile ? 0 : -20, scale: 0.9 }}
+                  whileInView={{ 
+                    opacity: 1, 
+                    x: isMobile ? 0 : cert.x, 
+                    y: isMobile ? 0 : cert.y, 
+                    rotate: isMobile ? 0 : cert.rotate, 
+                    scale: 1 
                   }}
-                  className="absolute"
+                  viewport={{ once: true }}
+                  transition={{
+                    delay: index * 0.1,
+                    duration: 0.8,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                  className={isMobile ? 'relative w-full max-w-sm' : 'absolute'}
                   style={{
                     zIndex: isFocused ? 50 : index + 10,
-                    transformStyle: "preserve-3d",
                   }}
-                  onMouseEnter={() => setHoveredCert(cert)}
-                  onMouseLeave={() => setHoveredCert(null)}
+                  onMouseEnter={() => !isMobile && setHoveredCert(cert)}
+                  onMouseLeave={() => !isMobile && setHoveredCert(null)}
+                  onClick={() => isMobile && setHoveredCert(hoveredCert?.id === cert.id ? null : cert)}
                 >
-                  {/* 2. Infinite Floating Wrapper (Runs independently of interactivity) */}
+                  {/* Infinite Floating Wrapper */}
                   <motion.div
-                    animate={{ y: [0, -10, 0] }}
+                    animate={isMobile ? { y: [0, -4, 0] } : { y: [0, -8, 0] }}
                     transition={{
-                      duration: 4 + index * 0.5,
+                      duration: 4 + index * 0.4,
                       repeat: Infinity,
                       ease: "easeInOut",
                     }}
                   >
-                    {/* 3. Snappy Interactive Hover Mechanics (Zero Delay, Spring Physics) */}
-                    <motion.a
-                      href={cert.link}
-                      target="_blank"
-                      rel="noreferrer"
+                    {/* Interactive Hover Mechanics */}
+                    <motion.div
                       animate={{
-                        opacity: isFaded ? 0.4 : 1,
-                        filter: isFaded ? "blur(4px)" : "blur(0px)",
-                        scale: isFocused ? 1.08 : 1,
-                        rotate: isFocused ? -cert.rotate : 0, // Undoes the outer transform rotation
-                        y: isFocused ? -25 : 0,
-                        x: isFaded ? (cert.x > 0 ? 30 : -30) : 0, // Faded cards part ways
+                        opacity: isFaded ? 0.3 : 1,
+                        scale: isFocused ? 1.05 : 1,
+                        rotate: isFocused && !isMobile ? -cert.rotate : 0,
+                        y: isFocused ? -10 : 0,
                         boxShadow: isFocused
-                          ? "0px 40px 100px rgba(120,80,255,0.4)"
-                          : "0px 20px 40px rgba(0,0,0,0.5)",
+                          ? "0px 30px 60px rgba(239,68,68,0.2)"
+                          : "0px 10px 30px rgba(0,0,0,0.5)",
                       }}
                       transition={{ 
-                        type: "spring", 
-                        stiffness: 300, 
-                        damping: 25, 
-                        mass: 0.8 
+                        duration: 0.4,
+                        ease: "easeOut"
                       }}
-                      className="group block w-[260px] h-[360px] p-6 rounded-[2rem] bg-white/[0.05] backdrop-blur-xl border border-white/20 text-white relative overflow-hidden"
+                      className="group block w-full aspect-[3/4.2] md:w-[240px] md:h-[340px] p-6 rounded-xl bg-card border border-white/5 text-white relative overflow-hidden cursor-pointer"
                     >
-                      {/* Shine Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
-                      {/* Image Silhouette & Blur */}
+                      {/* Image Silhouette */}
                       <img
                         src={cert.image}
-                        className="absolute inset-0 w-full h-full object-cover opacity-20 blur-sm pointer-events-none"
+                        className="absolute inset-0 w-full h-full object-cover opacity-10 transition-opacity group-hover:opacity-20 pointer-events-none"
                         alt=""
                       />
 
                       {/* Foreground Content */}
                       <div className="relative z-10 flex flex-col h-full pointer-events-none">
                         <div className="flex justify-between items-center mb-4">
-                          <div className="p-2 bg-white/10 rounded-xl backdrop-blur-md border border-white/5">
-                            <Award className="text-purple-300 drop-shadow-md" size={22} />
+                          <div className="p-2 bg-red-500/10 rounded-sm border border-red-500/10">
+                            <Award className="text-red-500" size={18} />
                           </div>
-                          <span className="text-xs font-mono font-bold bg-black/40 px-3 py-1 rounded-full border border-white/5">{cert.year}</span>
+                          <span className="text-[10px] font-bold bg-black/40 px-2 py-1 rounded-sm border border-white/5 tracking-widest">{cert.year}</span>
                         </div>
 
-                        <div className="mt-auto bg-black/60 p-5 rounded-2xl backdrop-blur-md border border-white/10 shadow-lg">
-                          <h3 className="font-bold text-lg leading-snug tracking-tight mb-1">{cert.title}</h3>
-                          <p className="text-xs text-gray-400 font-medium">{cert.org}</p>
+                        <div className="mt-auto bg-black/80 p-5 rounded-lg border border-white/5 backdrop-blur-md">
+                          <h3 className="font-black text-sm uppercase italic tracking-tighter mb-1 leading-tight">{cert.title}</h3>
+                          <p className="text-[10px] text-neutral-500 font-bold uppercase tracking-widest">{cert.org}</p>
                         </div>
                       </div>
-                    </motion.a>
+                    </motion.div>
                   </motion.div>
                 </motion.div>
               );
@@ -179,43 +187,69 @@ const Certifications = () => {
           </div>
 
           {/* RIGHT: PREVIEW */}
-          <div className="w-full lg:w-1/2 max-w-[400px] h-[500px]">
+          <div className={`w-full lg:w-1/2 max-w-[450px] ${isMobile ? 'h-auto mt-8' : 'h-[550px]'}`}>
             <AnimatePresence mode="wait">
               {hoveredCert ? (
                 <motion.div
                   key={hoveredCert.id}
-                  initial={{ opacity: 0, x: 40, scale: 0.95 }}
-                  animate={{ opacity: 1, x: 0, scale: 1 }}
-                  exit={{ opacity: 0, x: 20, scale: 0.95 }}
-                  className="w-full h-full bg-black/40 backdrop-blur-xl border border-white/10 rounded-2xl p-6"
+                  initial={{ opacity: 0, x: isMobile ? 0 : 20, y: isMobile ? 20 : 0 }}
+                  animate={{ opacity: 1, x: 0, y: 0 }}
+                  exit={{ opacity: 0, x: isMobile ? 0 : 10, y: isMobile ? 10 : 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="w-full bg-card border border-white/5 rounded-xl p-6 md:p-8 flex flex-col shadow-2xl shadow-black/50"
                 >
-                  <h3 className="text-xl font-bold mb-2">
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="h-4 w-px bg-red-600" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-red-500">Certificate Details</span>
+                  </div>
+                  
+                  <h3 className="text-xl md:text-2xl font-black uppercase italic tracking-tighter mb-2 text-left">
                     {hoveredCert.title}
                   </h3>
-                  <p className="text-gray-400 mb-4">
+                  <p className="text-neutral-500 text-[10px] md:text-xs font-bold uppercase tracking-widest mb-8 text-left">
                     {hoveredCert.org} • {hoveredCert.year}
                   </p>
 
-                  <div className="h-[350px] overflow-hidden rounded-xl">
+                  <div className="aspect-video md:flex-1 overflow-hidden rounded-lg border border-white/5 group relative mb-6">
                     <motion.img
                       src={hoveredCert.image}
                       alt=""
                       initial={{ scale: 1.1 }}
                       animate={{ scale: 1 }}
-                      transition={{ duration: 0.6 }}
-                      className="w-full h-full object-cover"
+                      transition={{ duration: 0.8 }}
+                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
+                       <span className="text-[9px] font-bold uppercase tracking-[0.2em] flex items-center gap-2">Verify <ExternalLink size={12} className="text-red-500" /></span>
+                    </div>
                   </div>
+
+                  <a
+                    href={hoveredCert.link}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="w-full py-3 bg-red-600 hover:bg-red-700 text-white text-[10px] font-black uppercase tracking-[0.2em] text-center rounded-sm transition-colors"
+                  >
+                    Launch Verification
+                  </a>
                 </motion.div>
               ) : (
-                <div className="h-full flex items-center justify-center text-gray-500">
-                  Hover a certificate
-                </div>
+                !isMobile && (
+                  <div className="h-full flex flex-col items-center justify-center text-center p-12 bg-card/30 rounded-xl border border-dashed border-white/5">
+                    <div className="p-4 bg-white/5 rounded-full mb-4">
+                      <Award size={32} className="text-neutral-700" />
+                    </div>
+                    <p className="text-[10px] uppercase font-bold tracking-[0.2em] text-neutral-600">
+                      Hover a certificate to launch preview
+                    </p>
+                  </div>
+                )
               )}
             </AnimatePresence>
           </div>
         </div>
       </div>
+
     </section>
   );
 };

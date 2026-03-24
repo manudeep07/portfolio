@@ -21,12 +21,12 @@ const About = () => {
   return (
     <section
       id="about"
-      className="min-h-screen flex items-center pt-20 pb-12 bg-gradient-to-b from-[#0f172a] to-black text-white relative overflow-hidden"
+      className="py-24 bg-section text-white relative overflow-hidden"
     >
-      {/* 🌌 Soft Gradient Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-[radial-gradient(ellipse_60%_50%_at_50%_0%,rgba(120,119,198,0.15),transparent)] pointer-events-none"></div>
+      {/* 🌌 Subtle Background Pattern */}
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')]"></div>
 
-      <div className="container mx-auto px-6 max-w-6xl relative z-10">
+      <div className="container mx-auto px-6 md:px-16 max-w-6xl relative z-10">
         <motion.div
           key={refreshKey}
           initial="hidden"
@@ -41,11 +41,11 @@ const About = () => {
             <motion.div
               variants={fadeUp}
               custom={1}
-              className="flex items-center gap-3 mb-6"
+              className="flex items-center gap-4 mb-8"
             >
-              <span className="h-px bg-white/20 w-12"></span>
-              <h2 className="text-sm font-semibold tracking-[0.2em] text-gray-400 uppercase">
-                About Me
+              <div className="h-[2px] w-8 bg-red-600 rounded-full" />
+              <h2 className="text-[10px] uppercase font-bold tracking-[0.3em] text-red-500">
+                Performance & Intent
               </h2>
             </motion.div>
 
@@ -53,34 +53,25 @@ const About = () => {
             <motion.h3
               variants={fadeUp}
               custom={2}
-              className="text-4xl md:text-5xl font-bold mb-8 tracking-tight"
+              className="text-4xl md:text-5xl lg:text-6xl font-black mb-10 leading-[1] uppercase italic tracking-tighter"
             >
-              From curiosity to engineering scalable systems.
+              From <span className="text-neutral-700">Curiosity</span> <br />
+              to Engineering <br />
+              Scalable Systems.
             </motion.h3>
 
             {/* Content */}
-            <div className="space-y-6 text-gray-400 text-lg leading-relaxed">
+            <div className="space-y-6 text-neutral-400 text-lg leading-relaxed tracking-tight">
               <motion.p variants={fadeUp} custom={3}>
-                I’m Narasingu Manudeep, a Computer Science undergraduate from
-                Nellore, Andhra Pradesh, currently pursuing my Bachelor of
-                Technology at Lovely Professional University with a strong
-                academic foundation.
+                I’m Narasingu Manudeep, a Computer Science undergraduate with a drive for high-performance engineering. Currently pursuing my Bachelor of Technology at Lovely Professional University.
               </motion.p>
 
               <motion.p variants={fadeUp} custom={4}>
-                I am passionate about full-stack development and problem
-                solving, with hands-on experience in technologies like React,
-                Node.js, Express, and MongoDB. I’ve built real-world
-                applications such as a Virtual Classroom Platform and a
-                Learning Management System, gaining practical experience in
-                scalable system design.
+                I specialize in <span className="text-white font-bold italic">Full-Stack Development</span>, architecting real-world applications with React, Node.js, and MongoDB. My focus is on writing clean, efficient code that powers seamless digital experiences.
               </motion.p>
 
               <motion.p variants={fadeUp} custom={5}>
-                Alongside development, I have solved over 200 coding problems,
-                strengthening my logical thinking and consistency. I’m a quick
-                learner, collaborative team player, and constantly exploring
-                ways to grow as a software engineer.
+                With over <span className="text-red-500 font-black">200+</span> coding problems solved, I possess a sharp logical foundation and an relentless drive for optimization.
               </motion.p>
             </div>
           </div>
@@ -93,14 +84,14 @@ const About = () => {
               <motion.div
                 variants={fadeUp}
                 custom={3}
-                className="bg-white/[0.03] p-8 rounded-3xl border border-white/[0.08] backdrop-blur-xl hover:bg-white/[0.06] hover:border-white/20 transition-all duration-500 group-hover/list:opacity-50 hover:!opacity-100"
+                className="bg-card p-10 rounded-xl border border-white/5 hover:border-red-500/30 transition-all duration-500 group-hover/list:opacity-50 hover:!opacity-100 shadow-2xl shadow-black/50"
               >
-                <div className="p-3 bg-white/10 rounded-xl w-fit mb-6">
+                <div className="p-3 bg-red-500/10 text-red-500 rounded-sm w-fit mb-8">
                   <Code size={24} />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Frontend</h3>
-                <p className="text-gray-400 text-sm">
-                  Building responsive, high-performance interfaces with React and modern UI systems.
+                <h3 className="text-xs uppercase font-black tracking-widest mb-4 italic text-white group-hover:text-red-500 transition-colors">Frontend</h3>
+                <p className="text-neutral-500 text-sm leading-relaxed tracking-tight">
+                  High-speed, responsive interfaces built with React and precision styling systems.
                 </p>
               </motion.div>
 
@@ -108,14 +99,14 @@ const About = () => {
               <motion.div
                 variants={fadeUp}
                 custom={4}
-                className="bg-white/[0.03] p-8 rounded-3xl border border-white/[0.08] backdrop-blur-xl hover:bg-white/[0.06] hover:border-white/20 transition-all duration-500 sm:mt-12 group-hover/list:opacity-50 hover:!opacity-100"
+                className="bg-card p-10 rounded-xl border border-white/5 hover:border-red-500/30 transition-all duration-500 sm:mt-12 group-hover/list:opacity-50 hover:!opacity-100 shadow-2xl shadow-black/50"
               >
-                <div className="p-3 bg-white/10 rounded-xl w-fit mb-6">
+                <div className="p-3 bg-red-500/10 text-red-500 rounded-sm w-fit mb-8">
                   <Terminal size={24} />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">Backend</h3>
-                <p className="text-gray-400 text-sm">
-                  Designing scalable APIs and asynchronous architectures using Node.js and Express.
+                <h3 className="text-xs uppercase font-black tracking-widest mb-4 italic text-white group-hover:text-red-500 transition-colors">Backend</h3>
+                <p className="text-neutral-500 text-sm leading-relaxed tracking-tight">
+                  Scalable API architectures and robust server-side logic powered by Node.js.
                 </p>
               </motion.div>
 
@@ -123,6 +114,7 @@ const About = () => {
           </div>
         </motion.div>
       </div>
+
     </section>
   );
 };

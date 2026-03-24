@@ -8,8 +8,8 @@
   font-weight: 400;
 
   color-scheme: dark;
-  background-color: #000000;
-  color: rgba(255, 255, 255, 0.87);
+  background-color: #050505;
+  color: #FFFFFF;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -21,8 +21,9 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
-  @apply bg-background text-primary;
+  @apply bg-background text-primary tracking-tight;
   overflow-x: hidden;
+
   /* Prevent horizontal scroll on mobile */
   -webkit-tap-highlight-color: transparent;
   /* Remove tap highlight on mobile */
